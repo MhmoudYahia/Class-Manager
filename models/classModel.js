@@ -11,7 +11,7 @@ const classSchema = new mongoose.Schema({
     type: String,
     required: [true, "Enter a code for your class"],
     unique: true,
-    minlength:5
+    minlength: 5,
   },
   students: [
     {
@@ -24,6 +24,12 @@ const classSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: "Teacher",
       required: [true, "class must have a teacher"],
+    },
+  ],
+  materials: [
+    {
+      description: String,
+      link: String,
     },
   ],
 });
