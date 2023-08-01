@@ -4,10 +4,39 @@ const factory = require("./handlerFactory");
 const User = require("../models/userModel");
 const AppError = require("../utils/appError");
 const isURL = require("is-url");
+const multer = require("multer");
+const sharp = require("sharp");
+
+const storage = multer.memoryStorage();
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith("image")) {
+    cb(null, true);
+  } else {
+    cb(new AppError("Not an image! Please upload an image!", 400));
+  }
+};
+const upload = multer({ storage: storage, fileFilter: fileFilter });
+
+exports.uploadCoverImg = upload.single("coverImage");
+
+exports.resizePhoto = async (req, res, next) => {
+  if (!req.file) return next();
+  req.file.filename = `class-${Date.now()}-${req.user._id}.jpeg`;
+
+  await sharp(req.file.buffer)
+    .resize(500, 500)
+    .toFormat("jpeg")
+    .jpeg({ quality: 90 })
+    .toFile(
+      `F:/MyRepos/Class-Manager/Client/public/imgs/classImgs/${req.file.filename}`
+    );
+
+  next();
+};
 
 exports.deleteClass = factory.deleteOne(Class);
 exports.updateClass = factory.updateOne(Class);
-exports.getClass = factory.getOne(Class);
+exports.getClass = factory.getOne(Class, { path: "quizes" });
 exports.getAllClasses = factory.getAll(Class);
 
 exports.addMyEmail = (req, res, next) => {
@@ -15,7 +44,24 @@ exports.addMyEmail = (req, res, next) => {
   next();
 };
 
+exports.getMyClasses = catchAsync(async (req, res, next) => {
+  const myId = req.user._id;
+
+  const myClasses = await Class.find({
+    $or: [
+      { teachers: { $elemMatch: { $eq: myId } } },
+      { students: { $elemMatch: { $eq: myId } } },
+    ],
+  });
+
+  res.status(201).json({
+    status: "success",
+    data: { myClasses },
+  });
+});
+
 exports.createClass = catchAsync(async (req, res, next) => {
+  if (req.file) req.body.coverImage = req.file.filename;
   const newClass = await Class.create(req.body);
 
   newClass.teachers.push(req.user._id);
@@ -37,7 +83,7 @@ exports.addStudentOrTeacher = catchAsync(async (req, res, next) => {
 
   let myClass;
   if (id) myClass = await Class.findById(id);
-  else if (code) myClass = await Class.findOne(code);
+  else if (code) myClass = await Class.findOne({ code });
 
   if (!myClass) return next(new AppError("No Class with this code", 404));
 
@@ -45,7 +91,7 @@ exports.addStudentOrTeacher = catchAsync(async (req, res, next) => {
 
   if (!user) return next(new AppError("No user with this email", 404));
 
-  if (user.classes.includes(myClass._id))
+  if (user.classes.includes(myClass._id) || myClass.students.includes(user._id))
     return next(new AppError("This User allready exists", 400));
 
   if (user.__t === "Student") {
@@ -61,7 +107,7 @@ exports.addStudentOrTeacher = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     message: "email has been added successfully",
-    class: myClass,
+    data: { class: myClass },
   });
 });
 
@@ -140,5 +186,82 @@ exports.deleteMaterial = catchAsync(async (req, res, next) => {
     status: "success",
     message: "Material has been deleted successfully ",
     class: myClass,
+  });
+});
+
+exports.getClassStudents = catchAsync(async (req, res, next) => {
+  const { classId } = req.params;
+  const myClass = await Class.findById(classId).populate({
+    path: "students",
+    select: "name email",
+  });
+  if (!myClass) return next(new AppError("No Class with this code", 404));
+
+  res.status(200).json({
+    status: "success",
+    length: myClass.students.length,
+    students: myClass.students,
+  });
+});
+
+exports.getClassAnouncement = catchAsync(async (req, res, next) => {
+  const { classId } = req.params;
+  const myClass = await Class.findById(classId).populate({
+    path: "anouncements.teacher",
+    select: "name email",
+  });
+  if (!myClass) return next(new AppError("No Class with this code", 404));
+
+  res.status(200).json({
+    status: "success",
+    length: myClass.announcements.length,
+    anouncements: myClass.announcements,
+  });
+});
+
+exports.addAnnouncement = catchAsync(async (req, res, next) => {
+  const { teacher, announcementBody } = req.body; // make a mmiddleware for code
+  const { classId } = req.params;
+
+  if (!teacher || !announcementBody)
+    return next(
+      new AppError(
+        "To add a material, enter both the link and the description",
+        400
+      )
+    );
+
+  const myClass = await Class.findById(classId);
+  if (!myClass) return next(new AppError("No Class with this Id", 404));
+
+  myClass.announcements.push({ teacher, announcementBody });
+  await myClass.save();
+
+  res.status(200).json({
+    status: "success",
+    message: "announcement added successfully ",
+    class: myClass,
+  });
+});
+
+exports.unEnrollMe = catchAsync(async (req, res, next) => {
+  const userId = req.user._id;
+  const { classId } = req.params;
+
+  let myClass = await Class.findById(classId);
+
+  const temp = myClass.students.filter((studnt) => !studnt._id.equals(userId));
+
+  myClass.students = temp;
+  await myClass.save();
+
+  let user = await User.findById(userId);
+
+  user.classes = user.classes.filter((clss) => clss.toString() !== classId);
+  await user.save();
+
+  res.status(200).json({
+    status: "success",
+    message: "UnEnrollment Done",
   });
 });

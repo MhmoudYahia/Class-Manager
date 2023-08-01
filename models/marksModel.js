@@ -14,7 +14,36 @@ const markSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Class",
   },
-  maksValue: Number,
+  marksValue: Number,
+  maxMark: {
+    type: Number,
+    default: 50,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now(),
+  },
+  subject: {
+    type: String,
+    required: [true, "Enter a subject for the mark"],
+    trim: true,
+  },
+});
+
+markSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "teacher",
+    select: "name",
+  });
+  this.populate({
+    path: "student",
+    select: "name",
+  });
+  this.populate({
+    path: "class",
+    select: "name",
+  });
+  next();
 });
 
 module.exports = mongoose.model("Mark", markSchema);

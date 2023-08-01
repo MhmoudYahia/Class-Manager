@@ -26,7 +26,7 @@ const createAndSendToken = (user, statusCode, res, req) => {
 
   res.status(statusCode).json({
     status: "success",
-    token,
+    data: {user},
   });
 };
 
@@ -46,13 +46,14 @@ exports.signUp = catchAsync(async (req, res, next) => {
 
 exports.signIn = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
-
+  console.log(email, password);
   if (!email || !password) {
     return next(new appError("Enter your email or password", 400));
   }
-  const user = await User.findOne({ email }).select("+password");
 
+  const user = await User.findOne({ email }).select("+password");
   if (!user) {
+    console.log(1);
     return next(new appError("NO User With This Email, Go To Sign Up"), 404);
   }
 
@@ -173,7 +174,7 @@ exports.changePassword = catchAsync(async (req, res, next) => {
 
   user.password = newPassword;
   user.passwordConfirm = confirmNewPassword;
-  await user.save({ validateBeforeSave: false });
+  await user.save({ validateBeforeSave: true });
 
   createAndSendToken(user, 201, res, req);
 });
@@ -218,7 +219,7 @@ exports.forgetPassword = catchAsync(async (req, res, next) => {
   try {
     const resetUrl = `${req.protocol}://${
       req.get("host")
-      /*.replace(/\d+$/, 3000)*/
+      .replace(/\d+$/, 3000) // react port
     }/resetPassword/${resetToken}`; // set the react route here
     await new Email(user, resetUrl).sendResetPasswordEmail();
 

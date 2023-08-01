@@ -70,7 +70,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getUser = factory.getOne(User);
+exports.getUser = factory.getOne(User, { path: "classes" });
 
 exports.getMe = (req, res, next) => {
   req.params.id = req.user._id;

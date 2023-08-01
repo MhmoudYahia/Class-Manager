@@ -32,6 +32,56 @@ const classSchema = new mongoose.Schema({
       link: String,
     },
   ],
+  coverImage: {
+    type: String,
+    default: "/imgs/classImgs/cover.jpg.jpg",
+  },
+  announcements: [
+    {
+      teacher: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Teacher",
+      },
+      createdAt: {
+        type: Date,
+        default: Date.now(),
+      },
+      announcementBody: {
+        type: String,
+        default: "Hello Everybody",
+      },
+    },
+  ],
+},
+{
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true },
+  // strictQuery: true,
+  virtuals: true,
+});
+
+classSchema.virtual("quizes", {
+  ref: "Quiz",
+  localField: "_id",
+  foreignField: "class",
+});
+
+classSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "teachers",
+    select: "name email",
+  });
+
+  this.populate({
+    path: "students",
+    select: "name email",
+  });
+
+  this.populate({
+    path: "announcements.teacher",
+    select: "name email",
+  });
+  next();
 });
 
 module.exports = mongoose.model("Class", classSchema);

@@ -1,5 +1,23 @@
+
+  @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,300;1,500;1,700&display=swap');
+
+
+* {
+  font-family: 'Roboto', sans-serif;
+}
+a{
+  text-decoration: none;
+    color: white;
+}
+body{
+  overflow-x: hidden;
+}
+.css-heg063-MuiTabs-flexContainer{
+  justify-content: center;
+}
 .App {
   text-align: center;
+  overflow-x: hidden;
 }
 
 .App-logo {
@@ -24,15 +42,69 @@
   color: white;
 }
 
+.dialog-title {
+  font-size: 22px !important;
+  text-align: center;
+  background-color: blueviolet;
+  margin-bottom: 50px !important; 
+  color: white;
+  text-transform: uppercase;
+}
+.MuiFormControl-root{
+  width: 100%;
+}
 .App-link {
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
+.alert {
+  position: fixed;
+  left: 50%;
+  top: 64px;
+  transform: translateX(-50%);
+  box-shadow: 0 0 89px 18px rgb(0, 0, 0, 0.5) !important;
+  animation-name: alert;
+  animation-duration: 2s;
+  animation-iteration-count: 1;
+  z-index: 1500;
+}
+
+@keyframes alert {
   from {
-    transform: rotate(0deg);
+    opacity: 0;
+    top: 0;
   }
   to {
-    transform: rotate(360deg);
+    opacity: 1;
+    top: 64px;
   }
+}
+
+/*======================
+    404 page
+=======================*/
+
+.page_404 {
+  padding: 40px 0;
+  background: #fff;
+  font-family: "Arvo", serif;
+}
+
+.page_404 img {
+  width: 100%;
+}
+
+.four_zero_four_bg {
+  background-image: url(https://cdn.dribbble.com/users/722246/screenshots/3066818/404-page.gif);
+  height: 650px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.four_zero_four_bg h1 {
+  font-size: 80px;
+}
+
+.four_zero_four_bg h3 {
+  font-size: 80px;
 }

@@ -38,7 +38,7 @@ const userSchema = new mongoose.Schema({
       validator: function (ele) {
         return ele === this.password;
       },
-      message: "passwordConfirm is wrong",
+      message: "Passwords are not the same",
     },
   },
   active: {
@@ -57,7 +57,10 @@ const userSchema = new mongoose.Schema({
   passwordResetToken: String,
 });
 
-// Create models for each schema
+userSchema.pre(/^find/, function (next) {
+  this.find({ active: { $ne: false } });
+  next();
+});
 
 userSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
@@ -81,11 +84,6 @@ userSchema.methods.checkIfPasswordIsCorrect = async function (
 ) {
   return await bcrypt.compare(myPlaintextPassword, hash);
 };
-
-userSchema.pre(/^find/, function (next) {
-  this.find({ active: { $ne: false } });
-  next();
-});
 
 userSchema.methods.createPasswordResetToken = function () {
   const resetToken = crypto.randomBytes(32).toString("hex");

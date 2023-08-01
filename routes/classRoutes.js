@@ -1,15 +1,33 @@
 const express = require("express");
 const classController = require("../controllers/classController");
 const authController = require("../controllers/authController");
+const marksRouter = require("../routes/marksRouter");
 
 const router = express.Router({ mergeParams: true });
 
 router.use(authController.protect);
 
+router.use("/:classId/marks", marksRouter);
+
+router.route("/getMyClasses").get(classController.getMyClasses);
+
+//not needed
+router.route("/:classId/students").get(classController.getClassStudents);
+router.route("/:classId/anouncements").get(classController.getClassAnouncement);
+
+router
+  .route("/:classId/addAnnouncement")
+  .post(authController.strictTo("Teacher"), classController.addAnnouncement);
+
 router
   .route("/")
   .get(classController.getAllClasses)
-  .post(authController.strictTo("Teacher"), classController.createClass);
+  .post(
+    authController.strictTo("Teacher"),
+    classController.uploadCoverImg,
+    classController.resizePhoto,
+    classController.createClass
+  );
 
 //materials CRUD
 router
@@ -31,6 +49,10 @@ router
     classController.addMyEmail,
     classController.addStudentOrTeacher
   );
+
+router
+  .route("/:classId/unenroll")
+  .patch(authController.strictTo("Student"), classController.unEnrollMe);
 
 router
   .route("/:id/addUser")
