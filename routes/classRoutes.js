@@ -20,6 +20,14 @@ router
   .post(authController.strictTo("Teacher"), classController.addAnnouncement);
 
 router
+  .route("/:id/editAnnouncement/:annId")
+  .patch(authController.strictTo("Teacher"), classController.editAnnouncement);
+
+router
+  .route("/:id/deleteAnnouncement/:annId")
+  .delete(authController.strictTo("Teacher"), classController.deleteAnnouncement);
+
+router
   .route("/")
   .get(classController.getAllClasses)
   .post(

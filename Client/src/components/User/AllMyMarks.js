@@ -79,6 +79,8 @@ export const MyMarks = () => {
           <TableHead>
             <TableRow>
               <StyledTableCell align="center">Date</StyledTableCell>
+              <StyledTableCell align="center">Class Name</StyledTableCell>
+              <StyledTableCell align="center">Class Code</StyledTableCell>
               <StyledTableCell align="center">Subject</StyledTableCell>
               <StyledTableCell align="center">Teacher</StyledTableCell>
               <StyledTableCell align="center">Mark Obtained</StyledTableCell>
@@ -102,10 +104,10 @@ export const MyMarks = () => {
                       hour12: true,
                     })}
                   </TableCell>
+                  <TableCell align="center">{mark.class.name}</TableCell>
+                  <TableCell align="center">{mark.class.code}</TableCell>
                   <TableCell align="center">{mark.subject}</TableCell>
-
                   <TableCell align="center">{mark.teacher.name}</TableCell>
-
                   <TableCell align="center">{mark.marksValue}</TableCell>
                   <TableCell align="center">{mark.maxMark}</TableCell>
                 </StyledTableRow>

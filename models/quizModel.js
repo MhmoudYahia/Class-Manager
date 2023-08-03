@@ -34,10 +34,21 @@ const quizSchema = new mongoose.Schema({
     type: Number,
     default: 2,
   },
+  maxMarkValue: Number,
+  canReSubmit: {
+    type: Boolean,
+    default: false,
+  },
   submissions: [
     {
+      selectedAnswers: [
+        {
+          question: mongoose.Schema.Types.ObjectId,
+          answer: String,
+          isCorrect: Boolean,
+        },
+      ],
       markValue: Number,
-      maxMarkValue: Number,
       student: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Student",
@@ -60,4 +71,11 @@ quizSchema.pre(/^find/, function (next) {
   });
   next();
 });
+
+// quizSchema.virtual("submissions", {
+//   ref: "Submission",
+//   localField: "_id",
+//   foreignField: "quiz",
+// });
+
 module.exports = mongoose.model("Quiz", quizSchema);

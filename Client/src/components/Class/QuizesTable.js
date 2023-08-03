@@ -4,6 +4,7 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
+import MenuItem from "@mui/material/MenuItem";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
@@ -27,7 +28,7 @@ import Tooltip from "@mui/material/Tooltip";
 import { setAlertInfo, setShowAlert } from "../../redux/alertSlice";
 import { useDispatch } from "react-redux";
 import { fetchWrapper } from "../../utils/fetchWrapper";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   fontWeight: "bold",
@@ -58,6 +59,8 @@ export const QuizesTable = ({ role, quizes: initQuizes, classId, teacher }) => {
   const [correctAnswer, setCorrectAnswer] = useState("");
   const [open, setOpen] = useState(false);
   const [quizSubject, setQuizSubject] = useState("");
+  const [maxMarkValue, setMaxMarkValue] = useState(0);
+  const [canReSubmit, setCanReSubmit] = useState(false);
   const [quizPublishDate, setQuizPublishDate] = useState(
     new Date(new Date() + 1000 * 60 * 60 * 24)
   );
@@ -90,6 +93,7 @@ export const QuizesTable = ({ role, quizes: initQuizes, classId, teacher }) => {
       correctAnswer,
       questionMark,
     };
+    setMaxMarkValue(maxMarkValue + parseInt(questionMark));
     setQuestions([...questions, newQuestion]);
     // Handle adding the new question to the quiz here
     setNumOptions(0);
@@ -126,8 +130,10 @@ export const QuizesTable = ({ role, quizes: initQuizes, classId, teacher }) => {
         subject: quizSubject,
         duration,
         class: classId,
-        teacher,
+        teacher: teacher._id,
         publishAt: quizPublishDate,
+        maxMarkValue,
+        canReSubmit,
       }),
       { "Content-Type": "application/json" }
     );
@@ -159,7 +165,13 @@ export const QuizesTable = ({ role, quizes: initQuizes, classId, teacher }) => {
     if (status === "success") {
       setOpen(false);
       setQuestions([]);
-      setQuizes([...quizes, data.doc]);
+      const temp = {
+        _id: data.doc._id,
+        teacher,
+        publishAt: data.doc.publishAt,
+        subject: data.doc.subject,
+      };
+      setQuizes([...quizes, temp]);
     }
     //api request add quiz
   };
@@ -266,7 +278,7 @@ export const QuizesTable = ({ role, quizes: initQuizes, classId, teacher }) => {
           <TableBody>
             {quizes &&
               quizes
-                .filter((quiz) => new Date(quiz.publishAt) <= new Date()) // filter quizzes based on publishAt value
+                // .filter((quiz) => new Date(quiz.publishAt) <= new Date()) // filter quizzes based on publishAt value
                 .map((quiz) => (
                   <StyledTableRow key={quiz._id}>
                     <TableCell component="th" scope="row" align="center">
@@ -293,27 +305,33 @@ export const QuizesTable = ({ role, quizes: initQuizes, classId, teacher }) => {
                           </IconButton>
                         )}
                       </Tooltip>
+
                       <Tooltip title="Start The Quiz!">
                         {role === "Student" && (
+                          // <Link to={`quizes/${quiz._id}`}>
                           <IconButton
                             color="success"
                             aria-label="go"
-                            onClick={() => navigate(`quizes/${quiz._id}`)}
+                            onClick={() =>
+                              (window.location.href = `http://localhost:3000/quizes/${quiz._id}`)
+                            }
                           >
-                            GO <ContentPasteGoIcon />
+                            <ContentPasteGoIcon />
                           </IconButton>
+                          // </Link>
                         )}
                       </Tooltip>
                       <Tooltip title="Quiz is closed now">
-                        {role === "Student" && (
+                        {/* {role === "Student" && (
                           <Button
                             variant="contained"
                             color="error"
+                            size=
                             sx={{ cursor: "default" }}
                           >
                             Closed
                           </Button>
-                        )}
+                        )} */}
                       </Tooltip>
                       {role === "Teacher" && (
                         <Button
@@ -374,24 +392,32 @@ export const QuizesTable = ({ role, quizes: initQuizes, classId, teacher }) => {
             <Table sx={{ minWidth: 500 }} aria-label="class table">
               <TableHead>
                 <TableRow>
-                  <StyledTableCell>Submission Date</StyledTableCell>
-                  <StyledTableCell>Student</StyledTableCell>
-                  <StyledTableCell>Marks</StyledTableCell>
+                  <StyledTableCell  align="center">Submission Date</StyledTableCell>
+                  <StyledTableCell  align="center">Student</StyledTableCell>
+                  <StyledTableCell  align="center" >Marks</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {submissions &&
                   submissions.map((submission) => (
                     <StyledTableRow key={submission._id}>
-                      <TableCell component="th" scope="row">
-                        {new Date(submission.submittedAt).toLocaleDateString(
-                          "en-GB"
+                      <TableCell component="th" scope="row" align="center">
+                        {new Date(submission.submittedAt).toLocaleString(
+                          "en-US",
+                          {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                            hour: "numeric",
+                            minute: "numeric",
+                            hour12: true,
+                          }
                         )}
                       </TableCell>
-                      <TableCell align="left">
+                      <TableCell align="center">
                         {submission.student.name}
                       </TableCell>
-                      <TableCell align="left">{submission.markValue}</TableCell>
+                      <TableCell align="center">{submission.markValue}</TableCell>
                     </StyledTableRow>
                   ))}
               </TableBody>
@@ -496,6 +522,25 @@ export const QuizesTable = ({ role, quizes: initQuizes, classId, teacher }) => {
             value={questionMark}
             onChange={(e) => setQuestionMark(e.target.value)}
           />
+          <TextField
+            select
+            label="Student"
+            value={canReSubmit}
+            onChange={(e) => {
+              setCanReSubmit(e.target.value);
+            }}
+            fullWidth
+            margin="normal"
+            variant="outlined"
+          >
+            <MenuItem key={1} value={true}>
+              true
+            </MenuItem>
+
+            <MenuItem key={2} value={false}>
+              false
+            </MenuItem>
+          </TextField>
         </DialogContent>
         <StyledButton onClick={handleAddQuestionClick}>
           Add Question

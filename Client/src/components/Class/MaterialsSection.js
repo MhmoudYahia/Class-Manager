@@ -218,27 +218,19 @@ export const MaterialsSection = ({ role, materials: m, classId }) => {
       </Typography>
       <Container sx={{ margin: "auto" }}>
         {role === "Teacher" && (
-          <Card
+          <Button
+            variant="contained"
             sx={{
-              color: "white",
               cursor: "pointer",
-              margin: "10px",
+              marginBottom: "10px",
               border: "2px solid #8a2be2",
-              padding: "14px",
-              backgroundColor: "#00539b",
-              borderRadius: "11px",
+              // padding: "14px",
+              // borderRadius: "11px",
             }}
             onClick={handleAddDialogOpen}
           >
-            <Typography
-              gutterBottom
-              variant="h5"
-              component="div"
-              style={{ padding: 10 }}
-            >
-              Add New Material
-            </Typography>
-          </Card>
+            Add New Material
+          </Button>
         )}
         {materials.map((material) => (
           <Card

@@ -6,7 +6,6 @@ const router = express.Router({ mergeParams: true });
 
 router.use(authController.protect);
 
-
 router.route("/getClassQuizes").get(quizController.getClassQuizes);
 
 router
@@ -25,14 +24,13 @@ router
 
 router
   .route("/:quizId/submit")
-  .patch(
-    authController.strictTo("Student"),
-    quizController.preSubmitQuiz,
-    quizController.submitQuiz
-  );
+  .patch(authController.strictTo("Student"), quizController.submitQuiz);
 
 router
   .route("/:quizId/submissions")
   .get(authController.strictTo("Teacher"), quizController.getSubmissions);
 
+router
+  .route("/:quizId/reEnterQuiz")
+  .patch(authController.strictTo("Student"), quizController.reEnterQuiz);
 module.exports = router;

@@ -23,8 +23,9 @@ import { ErrorPage } from "../../utils/ErrorPage";
 import { fetchWrapper } from "../../utils/fetchWrapper";
 import { useFetch } from "../../utils/useFetch";
 import Skeleton from "@mui/material/Skeleton";
+import { useDispatch, useSelector } from "react-redux";
+import { setAlertInfo, setShowAlert } from "../../redux/alertSlice";
 
-const doc = {};
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   fontWeight: "bold",
   color: theme.palette.text.primary,
@@ -32,11 +33,15 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 const QuizPage = (/*{ doc }*/) => {
   const { id } = useParams();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.userData);
   const [selectedAnswers, setSelectedAnswers] = React.useState({});
+  const [isSelectedAnswersCorrect, setisSelectedAnswersCorrect] =
+    React.useState({});
   const [totalMark, setTotalMark] = React.useState(0);
   const [marksObtained, setMarksObtained] = React.useState(0);
   const [isSubmitted, setIsSubmitted] = React.useState(false);
-  const [remainingTime, setRemainingTime] = React.useState(doc.duration * 60);
+  const [remainingTime, setRemainingTime] = React.useState("");
   const [dialogOpen, setDialogOpen] = React.useState(false);
 
   React.useEffect(() => {
@@ -59,6 +64,40 @@ const QuizPage = (/*{ doc }*/) => {
     status,
   } = useFetch(`http://localhost:1445/api/v1/quizes/${id}`);
 
+  React.useEffect(() => {
+    if (status === "success") {
+      setRemainingTime(parseInt(quizData.doc.duration * 60));
+    }
+    if (quizData.isSubmitted) {
+      dispatch(
+        setAlertInfo({
+          severity: "success",
+          message: "Done!😶‍🌫️",
+        })
+      );
+      dispatch(setShowAlert(true));
+      setTimeout(() => {
+        dispatch(setShowAlert(false));
+      }, 5000);
+      setIsSubmitted(true);
+      quizData.doc.submissions.forEach((sub, i) => {
+        if (sub.student._id.toString() === user._id.toString()) {
+          setMarksObtained(sub.markValue);
+          sub.selectedAnswers.forEach((answerS) => {
+            setSelectedAnswers((prevState) => ({
+              ...prevState,
+              [answerS.question.toString()]: answerS.answer,
+            }));
+            setisSelectedAnswersCorrect((prevState) => ({
+              ...prevState,
+              [answerS.question.toString()]: answerS.isCorrect,
+            }));
+          });
+        }
+      });
+    }
+  }, [status]);
+
   if (loading) {
     return (
       <Skeleton animation="wave" height="50px" style={{ margin: "0 20px" }} />
@@ -78,31 +117,79 @@ const QuizPage = (/*{ doc }*/) => {
   };
 
   const handleAnswerSelect = (questionId, answer) => {
-    if (!isSubmitted) {
-      setSelectedAnswers({
-        ...selectedAnswers,
-        [questionId]: answer,
-      });
-    }
+    // if (!isSubmitted) {
+    if (!answer) answer = "";
+
+    setSelectedAnswers({
+      ...selectedAnswers,
+      [questionId.toString()]: answer,
+    });
+    // }
   };
 
-  const handleSubmit = () => {
-    handleDialogOpen();
-    const newMarksObtained = doc.questions.reduce((total, question) => {
-      const selectedAnswer = selectedAnswers[question._id];
-      if (selectedAnswer && selectedAnswer === question.correctAnswer) {
-        return total + question.questionMark;
-      }
-      return total;
-    }, 0);
-    setMarksObtained(newMarksObtained);
-    setTotalMark(
-      doc.questions.reduce(
-        (total, question) => total + question.questionMark,
-        0
-      )
+  const handleSubmit = async () => {
+    let submissionQuestions = [];
+    const newMarksObtained = quizData.doc.questions.reduce(
+      (total, question, index) => {
+        const selectedAnswer = selectedAnswers[question._id];
+        submissionQuestions[index] = {};
+        submissionQuestions[index].answer = selectedAnswer;
+        submissionQuestions[index].question = question._id;
+        if (selectedAnswer && selectedAnswer === question.correctAnswer) {
+          submissionQuestions[index].isCorrect = true;
+          return total + question.questionMark;
+        }
+        submissionQuestions[index].isCorrect = false;
+        return total;
+      },
+      0
     );
-    setIsSubmitted(true);
+
+    const { message, data, status } = await fetchWrapper(
+      `/quizes/${id}/submit`,
+      "PATCH",
+      JSON.stringify({
+        markValue: newMarksObtained,
+        selectedAnswers: submissionQuestions,
+      }),
+      { "Content-Type": "application/json" }
+    );
+    if (status === "success") {
+      dispatch(
+        setAlertInfo({
+          severity: "success",
+          message: "Quiz has been submitted successfully🫡",
+        })
+      );
+      dispatch(setShowAlert(true));
+      setTimeout(() => {
+        dispatch(setShowAlert(false));
+      }, 3000);
+    } else {
+      dispatch(
+        setAlertInfo({
+          severity: "error",
+          message,
+        })
+      );
+      dispatch(setShowAlert(true));
+      setTimeout(() => {
+        dispatch(setShowAlert(false));
+      }, 5000);
+    }
+    // frontend submit button
+
+    if (status === "success") {
+      handleDialogOpen();
+      setMarksObtained(newMarksObtained);
+      setTotalMark(
+        quizData.doc.questions.reduce(
+          (total, question) => total + question.questionMark,
+          0
+        )
+      );
+      setIsSubmitted(true);
+    }
   };
 
   const formatTime = (time) => {
@@ -113,9 +200,39 @@ const QuizPage = (/*{ doc }*/) => {
       .padStart(2, "0")}`;
   };
 
+  const handelReEnter = async () => {
+    const { message, data, status } = await fetchWrapper(
+      `/quizes/${id}/reEnterQuiz`,
+      "PATCH"
+    );
+    if (status !== "success") {
+      dispatch(
+        setAlertInfo({
+          severity: "error",
+          message,
+        })
+      );
+      dispatch(setShowAlert(true));
+      setTimeout(() => {
+        dispatch(setShowAlert(false));
+      }, 5000);
+    } else {
+      window.location.reload();
+    }
+  };
   return (
     <Box sx={{ p: 2, margin: "10px" }}>
-      <Typography variant="h4" gutterBottom>
+      {isSubmitted && quizData.doc.canReSubmit && (
+        <Button
+          onClick={handelReEnter}
+          variant="contained"
+          sx={{ position: "absolute", left: "14px", top: "85px" }}
+          color="secondary"
+        >
+          ReEnter
+        </Button>
+      )}
+      <Typography variant="h4" gutterBottom textTransform="capitalize">
         {quizData.doc.subject} Quiz
       </Typography>
       <Box sx={{ mb: 2 }}>
@@ -126,23 +243,35 @@ const QuizPage = (/*{ doc }*/) => {
         <Typography variant="subtitle1">
           Duration: {quizData.doc.duration} minutes
         </Typography>
+        {isSubmitted && (
+          <Box sx={{ mb: 2 }}>
+            <Button
+              variant="contained"
+              sx={{ marginTop: 2 }}
+              onClick={() => setDialogOpen(true)}
+            >
+              Show My Mark
+            </Button>
+          </Box>
+        )}
         {!isSubmitted && (
           <Typography
             variant="subtitle1"
             sx={{
               position: "fixed",
-              top: "10%",
-              right: " 2%",
+              top: "11%",
+              right: " 1%",
               border: "2px solid blueviolet",
               padding: "5px 10px",
               backgrounColor: "#fff3f4",
-              boxShadow: "0 0 5px 1px red",
+              boxShadow: "0 0 5px 1px #4d36be",
             }}
           >
             {formatTime(remainingTime)}
           </Typography>
         )}
       </Box>
+
       <Box sx={{ mb: 2 }}>
         {quizData &&
           quizData.doc.questions.map((question) => (
@@ -152,7 +281,13 @@ const QuizPage = (/*{ doc }*/) => {
                 mb: 2,
                 border: "2px solid blueviolet",
                 padding: "21px",
-                " background-color": "aliceblue",
+                backgroundColor: `${
+                  isSelectedAnswersCorrect[question._id] === true
+                    ? "aliceblue"
+                    : isSelectedAnswersCorrect[question._id] === false
+                    ? "#ff00002e"
+                    : "aliceblue"
+                }`,
               }}
             >
               <Typography
@@ -160,10 +295,12 @@ const QuizPage = (/*{ doc }*/) => {
                 align="start"
                 sx={{ display: "flex", justifyContent: "space-between" }}
               >
-                <Typography sx={{ fontWeight: "bold", mb: 1 }}>
+                <Typography
+                  sx={{ fontWeight: "bold", mb: 1, color: "#2c86ff" }}
+                >
                   {question.question}?
                 </Typography>{" "}
-                <Typography align="end">
+                <Typography align="end" color="#00be3d">
                   {question.questionMark} marks
                 </Typography>
               </Typography>
@@ -185,6 +322,16 @@ const QuizPage = (/*{ doc }*/) => {
                   />
                 ))}
               </RadioGroup>
+              {isSubmitted && (
+                <Typography
+                  color="#18ce47"
+                  align="left"
+                  margin="10px 0"
+                  fontWeight="500"
+                >
+                  Correct Answer: {question.correctAnswer}
+                </Typography>
+              )}
             </Box>
           ))}
       </Box>
@@ -195,7 +342,6 @@ const QuizPage = (/*{ doc }*/) => {
           </Button>
         </Box>
       )}
-
       {/* Dialog  */}
       <Dialog open={dialogOpen} onClose={handleDialogClose}>
         <DialogTitle className="dialog-title">Quiz Result</DialogTitle>
@@ -217,15 +363,22 @@ const QuizPage = (/*{ doc }*/) => {
               <TableBody>
                 <TableCell align="center"> {marksObtained}</TableCell>
 
-                <TableCell align="center">{totalMark}</TableCell>
+                <TableCell align="center">
+                  {quizData.doc.maxMarkValue}
+                </TableCell>
               </TableBody>
             </Table>
           </TableContainer>
           <Typography variant="body1" sx={{ mb: 1, mt: 2 }} align="center">
-            Congraturations 🫡
+            {`${
+              marksObtained > quizData.doc.maxMarkValue
+                ? "Congraturations 🫡"
+                : "Good Lock Next Time😂"
+            }`}
           </Typography>
         </DialogContent>
         <DialogActions>
+          
           <Button onClick={handleDialogClose}>Cancel</Button>
         </DialogActions>
       </Dialog>

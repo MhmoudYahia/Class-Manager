@@ -41,7 +41,7 @@ markSchema.pre(/^find/, function (next) {
   });
   this.populate({
     path: "class",
-    select: "name",
+    select: "name code",
   });
   next();
 });

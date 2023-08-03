@@ -6,6 +6,10 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
 import { useNavigate } from "react-router-dom";
 import { fetchWrapper } from "../../utils/fetchWrapper";
 import { setShowAlert, setAlertInfo } from "../../redux/alertSlice";
@@ -15,6 +19,7 @@ export const ClassCard = ({ clss, user }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [disabled, setDisabled] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const handleUnEnroll = async () => {
     const { message, data, status } = await fetchWrapper(
@@ -73,9 +78,13 @@ export const ClassCard = ({ clss, user }) => {
               </Typography>
             </CardContent>
           </CardActionArea>
-          <CardActions>
+          <CardActions >
             {user.__t === "Student" && (
-              <Button size="small" color="error" onClick={handleUnEnroll}>
+              <Button
+                size="small"
+                color="error"
+                onClick={() => setDialogOpen(true)}
+              >
                 Unenroll
               </Button>
             )}
@@ -89,6 +98,23 @@ export const ClassCard = ({ clss, user }) => {
           </CardActions>
         </Card>
       )}
+
+      <Dialog open={dialogOpen} onClose={(e) => setDialogOpen(false)}>
+        <DialogTitle className="dialog-title">
+          Confirm UnEnroll Class
+        </DialogTitle>
+        <DialogContent>
+          <Typography marginBottom={3}>
+            Are you sure you want to UnEnroll?
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={(e) => setDialogOpen(false)}>Cancel</Button>
+          <Button onClick={handleUnEnroll} color="error">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

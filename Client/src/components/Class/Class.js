@@ -71,6 +71,7 @@ export const Class = (props) => {
   const [value, setValue] = React.useState(0);
   const [confirmClassCode, setConfirmClassCode] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogOpen2, setDialogOpen2] = useState(false);
   const his = useNavigate();
 
   useEffect(() => {
@@ -109,6 +110,40 @@ export const Class = (props) => {
   if (status !== "success") {
     return <ErrorPage errorMessage={message}></ErrorPage>;
   }
+
+  const handleUnEnroll = async () => {
+    const { message, data, status } = await fetchWrapper(
+      `/classes/${id}/unenroll`,
+      "PATCH"
+    );
+    if (status === "success") {
+      dispatch(
+        setAlertInfo({
+          severity: "success",
+          title: "Unenrollment",
+          message: "Done ✌️",
+        })
+      );
+      dispatch(setShowAlert(true));
+
+      setTimeout(() => {
+        dispatch(setShowAlert(false));
+      }, 3000);
+    } else {
+      dispatch(
+        setAlertInfo({
+          severity: "error",
+          title: "Unenrollment",
+          message,
+        })
+      );
+      dispatch(setShowAlert(true));
+
+      setTimeout(() => {
+        dispatch(setShowAlert(false));
+      }, 5000);
+    }
+  };
 
   const handelDeleteClass = async () => {
     //handle edit material backend
@@ -174,15 +209,28 @@ export const Class = (props) => {
           title="Class Cover"
         />
       </Card>
-      <Button
-        variant="contained"
-        size="small"
-        sx={{ position: "absolute", top: "44%", left: "10px" }}
-        onClick={(e) => setDialogOpen(true)}
-        color="error"
-      >
-        Delete Class
-      </Button>
+      {user.__t === "Teacher" && (
+        <Button
+          variant="contained"
+          size="small"
+          sx={{ position: "absolute", top: "44%", left: "10px" }}
+          onClick={(e) => setDialogOpen(true)}
+          color="error"
+        >
+          Delete Class
+        </Button>
+      )}
+      {user.__t === "Student" && (
+        <Button
+          variant="contained"
+          size="small"
+          sx={{ position: "absolute", top: "44%", left: "10px" }}
+          onClick={(e) => setDialogOpen2(true)}
+          color="error"
+        >
+          UnEnroll
+        </Button>
+      )}
       <AppBar
         sx={{
           backgroundImage: "linear-gradient(to right bottom, #7dd56f, #28b487)",
@@ -262,11 +310,16 @@ export const Class = (props) => {
             quizes={classData.doc.quizes}
             role={user.__t}
             classId={classData.doc._id}
-            teacher={user._id}
+            teacher={user}
           />
         </TabPanel>
         <TabPanel value={value} index={2} dir={theme.direction}>
-          <MarksList classId={id} role={user.__t} students={classData.doc.students} teacher={user} />
+          <MarksList
+            classId={id}
+            role={user.__t}
+            students={classData.doc.students}
+            teacher={user}
+          />
         </TabPanel>
         <TabPanel value={value} index={3} dir={theme.direction}>
           <StudentsList students={classData.doc.students} />
@@ -305,6 +358,21 @@ export const Class = (props) => {
         <DialogActions>
           <Button onClick={(e) => setDialogOpen(false)}>Cancel</Button>
           <Button onClick={handelDeleteClass} color="error">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={dialogOpen2} onClose={(e) => setDialogOpen2(false)}>
+        <DialogTitle className="dialog-title">Confirm UnEnroll Class</DialogTitle>
+        <DialogContent>
+          <Typography marginBottom={3}>
+            Are you sure you want to UnEnroll?
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={(e) => setDialogOpen2(false)}>Cancel</Button>
+          <Button onClick={handleUnEnroll} color="error">
             Delete
           </Button>
         </DialogActions>

@@ -56,9 +56,8 @@ exports.getOne = (Model, popOptions) =>
   catchAsync(async (req, res, next) => {
     let id;
     if (req.params.markId) id = req.params.markId;
-    else if (req.params.quizId) id = req.params.quizId;
+    // else if (req.params.quizId) id = req.params.quizId;
     else id = req.params.id;
-
     
     let query = Model.findById(id);
     if (popOptions) query = query.populate(popOptions.path);
@@ -72,8 +71,6 @@ exports.getOne = (Model, popOptions) =>
     res.status(200).json({
       status: "success",
       data: { doc },
-      user: res.locals.user,
-      booked: res.locals.booked,
     });
   });
 

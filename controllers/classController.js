@@ -218,6 +218,49 @@ exports.getClassAnouncement = catchAsync(async (req, res, next) => {
     anouncements: myClass.announcements,
   });
 });
+exports.editAnnouncement = catchAsync(async (req, res, next) => {
+  const { announcementBody } = req.body; // make a mmiddleware for code
+  const { annId, id } = req.params;
+
+  if (!announcementBody) return next(new AppError("there is no change", 400));
+
+  const myClass = await Class.findById(id);
+  if (!myClass) return next(new AppError("No Class with this code", 404));
+
+  myClass.announcements.forEach((announcement) => {
+    // foreach run in background, so it is skiped in the event loop
+    if (announcement._id.toString() == annId.toString()) {
+      if (announcementBody) {
+        announcement.announcementBody = announcementBody;
+        announcement.isEdited = true;
+      }
+    }
+  });
+  await myClass.save();
+
+  res.status(200).json({
+    status: "success",
+    message: "Announcement has been edited successfully ",
+    class: myClass,
+  });
+});
+
+exports.deleteAnnouncement = catchAsync(async (req, res, next) => {
+  const { annId, id } = req.params;
+  const myClass = await Class.findById(id);
+  if (!myClass) return next(new AppError("No Class with this code", 404));
+
+  myClass.announcements = myClass.announcements.filter(
+    (announcement) => announcement._id.toString() != annId.toString()
+  );
+  await myClass.save();
+
+  res.status(200).json({
+    status: "success",
+    message: "Announcement has been deleted successfully ",
+    class: myClass,
+  });
+});
 
 exports.addAnnouncement = catchAsync(async (req, res, next) => {
   const { teacher, announcementBody } = req.body; // make a mmiddleware for code

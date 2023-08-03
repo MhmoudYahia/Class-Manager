@@ -82,6 +82,7 @@ export const StudentsList = ({ students }) => {
           pageSizeOptions={[5]}
           checkboxSelection
           disableRowSelectionOnClick
+          filterMode="client"
         />
       </Box>
     </>

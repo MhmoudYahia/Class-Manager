@@ -110,7 +110,6 @@ export const SignIn = () => {
         {showAlert && (
           <Alert
             severity={alertInfo.severity}
-            title={alertInfo.title}
             message={alertInfo.message}
           />
         )}
