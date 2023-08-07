@@ -22,17 +22,16 @@ import QuizPage from "./components/Quiz/QuizPage";
 import { useFetch } from "./utils/useFetch";
 import { Page404 } from "./utils/Page404";
 import { Stack } from "@mui/material";
-
+import { ChatBar } from "./components/chat/chat";
 import { useSelector } from "react-redux";
 import { MyMarks } from "./components/User/AllMyMarks";
 
 function App() {
   const { showAlert, alertInfo } = useSelector((state) => state.alert);
+  const { showChat, receiver } = useSelector((state) => state.chat);
   const user = useSelector((state) => state.user.userData);
   const loading = useSelector((state) => state.user.loading);
-  console.log(loading);
 
-  
   return (
     <div className="App">
       {showAlert && (
@@ -44,6 +43,9 @@ function App() {
       )}
       <Router>
         <Navbar />
+        {showChat && (
+          <ChatBar sender={user} receiver={receiver} />
+        )}
         {loading && (
           <Stack spacing={2} margin={2}>
             <>
@@ -58,7 +60,10 @@ function App() {
           <Routes>
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
-            <Route path="/resetPassword/:resetToken" element={<ResetPassword />} />
+            <Route
+              path="/resetPassword/:resetToken"
+              element={<ResetPassword />}
+            />
             <Route path="/forgetPassword" element={<ForgetPassword />} />
             <Route path="/" element={user ? <HomeClasses /> : <Page404 />} />
             <Route

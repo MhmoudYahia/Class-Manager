@@ -101,14 +101,21 @@ export const Class = (props) => {
     status,
   } = useFetch(`http://localhost:1445/api/v1/classes/${id}`);
 
-  if (loading) {
+  const {
+    message: message2,
+    data: marksData,
+    loading: loading2,
+    status: status2,
+  } = useFetch(`http://localhost:1445/api/v1/classes/${id}/marks`);
+
+  if (loading || loading2) {
     return (
       <Skeleton animation="wave" height="50px" style={{ margin: "0 20px" }} />
     );
   }
 
-  if (status !== "success") {
-    return <ErrorPage errorMessage={message}></ErrorPage>;
+  if (status !== "success" || status2 !== "success") {
+    return <ErrorPage errorMessage={message + message2}></ErrorPage>;
   }
 
   const handleUnEnroll = async () => {
@@ -313,14 +320,17 @@ export const Class = (props) => {
             teacher={user}
           />
         </TabPanel>
+
         <TabPanel value={value} index={2} dir={theme.direction}>
           <MarksList
+            marks={marksData.docs}
             classId={id}
             role={user.__t}
             students={classData.doc.students}
             teacher={user}
           />
         </TabPanel>
+
         <TabPanel value={value} index={3} dir={theme.direction}>
           <StudentsList students={classData.doc.students} />
         </TabPanel>
@@ -364,7 +374,9 @@ export const Class = (props) => {
       </Dialog>
 
       <Dialog open={dialogOpen2} onClose={(e) => setDialogOpen2(false)}>
-        <DialogTitle className="dialog-title">Confirm UnEnroll Class</DialogTitle>
+        <DialogTitle className="dialog-title">
+          Confirm UnEnroll Class
+        </DialogTitle>
         <DialogContent>
           <Typography marginBottom={3}>
             Are you sure you want to UnEnroll?
@@ -373,7 +385,7 @@ export const Class = (props) => {
         <DialogActions>
           <Button onClick={(e) => setDialogOpen2(false)}>Cancel</Button>
           <Button onClick={handleUnEnroll} color="error">
-            Delete
+            Yes UnEnroll
           </Button>
         </DialogActions>
       </Dialog>

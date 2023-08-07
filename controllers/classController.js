@@ -36,7 +36,7 @@ exports.resizePhoto = async (req, res, next) => {
 
 exports.deleteClass = factory.deleteOne(Class);
 exports.updateClass = factory.updateOne(Class);
-exports.getClass = factory.getOne(Class, { path: "quizes" });
+exports.getClass = factory.getOne(Class, { path: "quizes marks" });
 exports.getAllClasses = factory.getAll(Class);
 
 exports.addMyEmail = (req, res, next) => {

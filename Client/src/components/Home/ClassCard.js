@@ -10,7 +10,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { fetchWrapper } from "../../utils/fetchWrapper";
 import { setShowAlert, setAlertInfo } from "../../redux/alertSlice";
 import { useDispatch } from "react-redux";
@@ -78,23 +78,22 @@ export const ClassCard = ({ clss, user }) => {
               </Typography>
             </CardContent>
           </CardActionArea>
-          <CardActions >
+          <CardActions sx={{ justifyContent: "end", gap: 1 }}>
             {user.__t === "Student" && (
               <Button
                 size="small"
                 color="error"
-                onClick={() => setDialogOpen(true)}
+                onClick={(e) => setDialogOpen(true)}
+                variant="outlined"
               >
                 Unenroll
               </Button>
             )}
-            <Button
-              size="small"
-              color="primary"
-              onClick={() => navigate(`/classes/${clss._id}`)}
-            >
-              Enter
-            </Button>
+            <Link to={`/classes/${clss._id}`}>
+              <Button variant="outlined" size="small" color="primary">
+                Enter
+              </Button>
+            </Link>
           </CardActions>
         </Card>
       )}

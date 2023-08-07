@@ -13,6 +13,7 @@ const globalErrorHandler = require("./controllers/errorController");
 
 const app = express();
 
+
 // Development logging
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
@@ -74,6 +75,7 @@ const classRoutes = require("./routes/classRoutes");
 const userRoutes = require("./routes/userRoutes");
 const quizRoutes = require("./routes/quizRoutes");
 const marksRouter = require("./routes/marksRouter");
+const chatRoutes = require("./routes/chatRoutes");
 
 app.use("/api/v1/quizes", quizRoutes);
 
@@ -84,6 +86,7 @@ app.use("/api/v1/teachers", teacherRoutes);
 app.use("/api/v1/students", studentRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/marks", marksRouter);
+app.use("/api/v1/chats", chatRoutes);
 
 app.all("*", (req, res, next) => {
   next(new appError(`Cant find ${req.originalUrl} on this server!`, 404));

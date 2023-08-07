@@ -4,13 +4,25 @@
 
 * {
   font-family: 'Roboto', sans-serif;
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #dedede;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #c2c2c2;
+    border-radius: 4px;
+  }
 }
 a{
   text-decoration: none;
     color: white;
 }
 body{
-  overflow-x: hidden;
+  overflow-x: hidden; 
 }
 .css-heg063-MuiTabs-flexContainer{
   justify-content: center;
@@ -107,4 +119,15 @@ body{
 
 .four_zero_four_bg h3 {
   font-size: 80px;
+}
+
+aside.EmojiPickerReact.epr-main {
+  height: 413px !important;
+  width: 376px !important;
+  position: absolute !important;
+  bottom: 77px !important;
+  right: 50px !important;
+}
+#account-menu MenuItem {
+  margin-bottom: 20px;
 }

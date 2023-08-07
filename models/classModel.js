@@ -72,15 +72,21 @@ classSchema.virtual("quizes", {
   foreignField: "class",
 });
 
+classSchema.virtual("marks", {
+  ref: "Mark",
+  localField: "_id",
+  foreignField: "class",
+});
+
 classSchema.pre(/^find/, function (next) {
   this.populate({
     path: "teachers",
-    select: "name email",
+    select: "name email photo",
   });
 
   this.populate({
     path: "students",
-    select: "name email",
+    select: "name email photo",
   });
 
   this.populate({

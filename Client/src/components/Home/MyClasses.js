@@ -196,6 +196,7 @@ export const HomeClasses = () => {
           fontWeight: 700,
           textDecoration: "underline",
           color: COLORS.mainColor,
+          textTransform: "uppercase",
         }}
       >
         My Classes

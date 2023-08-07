@@ -3,6 +3,7 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
+import Paper from "@mui/material/Paper";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Divider from "@mui/material/Divider";
@@ -14,11 +15,13 @@ import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import { Link, useNavigate } from "react-router-dom";
 import Dialog from "@mui/material/Dialog";
+import DoubleArrowIcon from "@mui/icons-material/DoubleArrow";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import InputAdornment from "@mui/material/InputAdornment";
 import Skeleton from "@mui/material/Skeleton";
+import GroupIcon from "@mui/icons-material/Group";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { TextField, Button } from "@mui/material";
@@ -32,11 +35,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useFetch } from "../../utils/useFetch";
 import { clearUser, setUser, setLoading } from "../../redux/userSlice";
 import { setAlertInfo, setShowAlert } from "../../redux/alertSlice";
+import { setReceiver, setShowChat } from "../../redux/chatSlice";
 
 export const Navbar = () => {
   const dispatch = useDispatch();
-
   const his = useNavigate();
+  const { showChat } = useSelector((state) => state.chat);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [showPass1, setShowPass1] = React.useState(false);
@@ -44,17 +48,22 @@ export const Navbar = () => {
   const [newPassword, setNewPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
   const [currentPassword, setCurrentPassword] = React.useState("");
+  const [showContacts, setShowContacts] = React.useState(false);
+  const [contacts, setContacts] = React.useState([]);
+  const [user, setUserInfo] = React.useState(null);
 
   const { status, data, message, loading } = useFetch(
     "http://localhost:1445/api/v1/users/me"
   );
-
-  const [user, setUserInfo] = React.useState(null);
+  // get contacts
+  const { data: d2 } = useFetch(
+    "http://localhost:1445/api/v1/chats/getContacts"
+  );
 
   React.useEffect(() => {
     dispatch(setLoading(loading));
   }, [loading]);
-  
+
   React.useEffect(() => {
     if (status === "success") {
       setUserInfo(data.doc);
@@ -161,7 +170,11 @@ export const Navbar = () => {
       <Skeleton animation="wave" height="50px" style={{ margin: "0 20px" }} />
     );
   }
-
+  const handleChatWith = (receiver) => {
+    // console.log(Object.assign( receiver));
+    dispatch(setReceiver(Object.assign(receiver)));
+    dispatch(setShowChat(true));
+  };
   return (
     <div className="navbar">
       <React.Fragment>
@@ -309,6 +322,9 @@ export const Navbar = () => {
               </MenuItem>
             </Link>
           )}
+          <MenuItem onClick={(e) => setShowContacts(true)}>
+            <GroupIcon sx={{ marginRight: 1, color: COLORS.mainColor }} /> Chats
+          </MenuItem>
           <Divider />
           <Link to="/signup" style={{ color: "#111" }}>
             <MenuItem>
@@ -332,6 +348,62 @@ export const Navbar = () => {
           </MenuItem>
         </Menu>
       </React.Fragment>
+
+      {showContacts && (
+        <Box
+          sx={{
+            position: "fixed",
+            bottom: "15px",
+            right: showChat ? "42%" : "7px",
+            zIndex: 50,
+            width: "20%",
+            padding: "10px",
+          }}
+        >
+          <Paper sx={{ padding: 2, backgroundColor: "#edededf0" }}>
+            <Typography
+              textTransform="uppercase"
+              marginBottom="20px"
+              color={COLORS.mainColor}
+              sx={{ textDecoration: "underline" }}
+              fontWeight="600"
+            >
+              Chats
+            </Typography>
+            {d2 &&
+              d2.contacts.map((contact) => (
+                <Button
+                  fullWidth
+                  color="secondary"
+                  onClick={() => handleChatWith(contact)}
+                  sx={{
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "start",
+                    textTransform: "capitalize",
+                    gap: "9px",
+                    marginBottom: 1,
+                  }}
+                >
+                  <Avatar
+                    alt={contact.name}
+                    src={`/imgs/users/${contact.photo}`}
+                  />
+                  <Typography>{contact.name}</Typography>
+                </Button>
+              ))}
+          </Paper>
+          <IconButton
+            onClick={() => setShowContacts(false)}
+            size="large"
+            color="secondary"
+            sx={{ position: "absolute", right: "7px", top: "5px" }}
+          >
+            <DoubleArrowIcon />
+          </IconButton>
+        </Box>
+      )}
 
       {/* Dialog for deleting rows */}
       <Dialog open={dialogOpen} onClose={handleDialogClose}>

@@ -2,19 +2,20 @@ import * as React from "react";
 import { Button, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid , GridToolbar} from "@mui/x-data-grid";
 import { COLORS } from "../../utils/colors";
 import { useFetch } from "../../utils/useFetch";
+import { useDispatch } from "react-redux";
+import { setReceiver, setShowChat } from "../../redux/chatSlice";
+
 
 export const StudentsList = ({ students }) => {
+  const dispatch = useDispatch();
   const rows = students.map((student) => ({
     ...student,
     id: student._id,
   }));
 
-  const [nbRows, setNbRows] = React.useState(3);
-  const removeRow = () => setNbRows((x) => Math.max(0, x - 1));
-  const addRow = () => setNbRows((x) => Math.min(100, x + 1));
   const columns = [
     { field: "_id", headerName: "ID", width: 400 },
     { field: "name", headerName: "Name", width: 350 },
@@ -29,7 +30,7 @@ export const StudentsList = ({ students }) => {
           color="primary"
           onClick={() => handleChat(params.row)}
         >
-          Chat
+          Chat 
         </Button>
       ),
     },
@@ -37,7 +38,8 @@ export const StudentsList = ({ students }) => {
 
   function handleChat(row) {
     // Implement your chat functionality here, using the row data
-    console.log("Chat with", row.name);
+    dispatch(setReceiver(row));
+    dispatch(setShowChat(true));
   }
 
   return (
@@ -59,31 +61,20 @@ export const StudentsList = ({ students }) => {
         Students
       </Typography>
       <Box sx={{ width: "100%" }}>
-        <Stack direction="row" spacing={1} sx={{ mb: 1 }}>
-          <Button size="small" onClick={removeRow}>
-            Remove a row
-          </Button>
-          <Button size="small" onClick={addRow}>
-            Add a row
-          </Button>
-        </Stack>
-
+    
+        
         <DataGrid
-          rows={rows.slice(0, nbRows)}
+          rows={rows}
           columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 4,
-              },
-            },
-          }}
           autoHeight
-          pageSizeOptions={[5]}
+          pageSizeOptions={[4]}
           checkboxSelection
           disableRowSelectionOnClick
-          filterMode="client"
+          components={{
+            Toolbar: GridToolbar,
+          }}
         />
+    
       </Box>
     </>
   );

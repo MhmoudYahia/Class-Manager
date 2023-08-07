@@ -43,9 +43,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export const MarksList = ({ classId, role, students, teacher }) => {
-  const [marks, setMarks] = useState([]);
+export const MarksList = ({ classId, role, students, teacher, marks: m }) => {
   const dispatch = useDispatch();
+  const [marks, setMarks] = useState([]);
   const [selectedMark, setSelectedMark] = useState(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -57,28 +57,9 @@ export const MarksList = ({ classId, role, students, teacher }) => {
     studentId: "",
   });
 
-  const {
-    message,
-    data: marksData,
-    loading,
-    status,
-  } = useFetch(`http://localhost:1445/api/v1/classes/${classId}/marks`);
-
   useEffect(() => {
-    if (status === "success") {
-      setMarks(marksData.docs);
-    }
-  }, [status]);
-
-  if (loading) {
-    return (
-      <Skeleton animation="wave" height="50px" style={{ margin: "0 20px" }} />
-    );
-  }
-
-  if (status !== "success") {
-    return <ErrorPage errorMessage={message}></ErrorPage>;
-  }
+    setMarks(m);
+  }, [m]);
 
   const handleEditClick = (mark) => {
     setSelectedMark(mark);
@@ -342,7 +323,7 @@ export const MarksList = ({ classId, role, students, teacher }) => {
         </Button>
       )}
 
-        {/* ///////////dialogs///////////// */}
+      {/* ///////////dialogs///////////// */}
       <Dialog open={editDialogOpen} onClose={handleEditDialogClose}>
         <DialogTitle className="dialog-title">Edit Mark</DialogTitle>
         <DialogContent>
