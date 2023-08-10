@@ -31,6 +31,14 @@ const classSchema = new mongoose.Schema(
       {
         description: String,
         link: String,
+        dateOfUploud: {
+          type: Date,
+          default: Date.now(),
+        },
+        teacher: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Teacher",
+        },
       },
     ],
     coverImage: {
@@ -91,6 +99,11 @@ classSchema.pre(/^find/, function (next) {
 
   this.populate({
     path: "announcements.teacher",
+    select: "name email",
+  });
+
+  this.populate({
+    path: "materials.teacher",
     select: "name email",
   });
   next();

@@ -6,6 +6,7 @@ const AppError = require("../utils/appError");
 const isURL = require("is-url");
 const multer = require("multer");
 const sharp = require("sharp");
+const Email = require("../utils/email");
 
 const storage = multer.memoryStorage();
 const fileFilter = (req, file, cb) => {
@@ -134,7 +135,15 @@ exports.addMaterial = catchAsync(async (req, res, next) => {
 
   if (!isURL(link)) return next(new AppError("Not a valid URL", 400));
 
-  myClass.materials.push({ link, description });
+  // send the email material
+  myClass.students.forEach(async (student) => {
+    const urlclass = `${req.protocol}://${
+      req.get("host").replace(/\d+$/, 3000) // react port
+    }/classes/${myClass._id}`; // set the react route here
+    await new Email(student, urlclass).sendNewMaterialEmail();
+  });
+
+  myClass.materials.push({ link, description, teacher: req.user.__d });
   await myClass.save();
 
   res.status(200).json({
@@ -276,6 +285,16 @@ exports.addAnnouncement = catchAsync(async (req, res, next) => {
 
   const myClass = await Class.findById(classId);
   if (!myClass) return next(new AppError("No Class with this Id", 404));
+
+  // send the email annoucement
+  myClass.students.forEach(async (student) => {
+    const urlclass = `${req.protocol}://${
+      req.get("host").replace(/\d+$/, 3000) // react port
+    }/classes/${myClass._id}`; // set the react route here
+    await new Email(student, urlclass).sendNewAnnoucementEmail(
+      announcementBody
+    );
+  });
 
   myClass.announcements.push({ teacher, announcementBody });
   await myClass.save();

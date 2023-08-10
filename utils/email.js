@@ -1,16 +1,16 @@
-const nodemailer = require('nodemailer');
-const pug = require('pug');
-const htmlToText = require('html-to-text');
+const nodemailer = require("nodemailer");
+const pug = require("pug");
+const htmlToText = require("html-to-text");
 
 module.exports = class Email {
   constructor(user, url) {
-    this.firstName = user.name.split(' ')[0];
+    this.firstName = user.name.split(" ")[0];
     this.url = url;
     this.to = user.email;
     this.from = `Mahmoud Yahia <${process.env.MAIL_FROM}>`;
   }
   newTransport() {
-    if (process.env.NODE_ENV === 'production') {
+    if (process.env.NODE_ENV === "production") {
       //sendinBlue
 
       return nodemailer.createTransport({
@@ -35,15 +35,13 @@ module.exports = class Email {
     });
   }
 
-  async sendEmail(template, subject) {
-    const html = pug.renderFile(
-      `${__dirname}/../views/emails/${template}.pug`,
-      {
-        firstName: this.firstName,
-        url: this.url,
-        subject,
-      }
-    );
+  async sendEmail(template, subject, announcementBody) {
+    const html = pug.renderFile(`${__dirname}/../emails/${template}.pug`, {
+      firstName: this.firstName,
+      url: this.url,
+      subject,
+      announcementBody,
+    });
 
     // 2) Define the email options
     const mailOptions = {
@@ -58,13 +56,28 @@ module.exports = class Email {
     await this.newTransport().sendMail(mailOptions);
   }
   async sendWelcomeEmail() {
-    await this.sendEmail('welcome', 'Welcome to Our Natours Family');
+    await this.sendEmail("welcome", "Welcome to Our Natours Family");
   }
 
   async sendResetPasswordEmail() {
     await this.sendEmail(
-      'passwordReset',
-      'Your password reset token (valid for only 10 minutes)'
+      "passwordReset",
+      "Your password reset token (valid for only 10 minutes)"
+    );
+  }
+
+  async sendNewAnnoucementEmail(announcementBody) {
+    await this.sendEmail(
+      "newAnnounce",
+      "New Annoucement Added to the class",
+      announcementBody
+    );
+  }
+
+  async sendNewMaterialEmail() {
+    await this.sendEmail(
+      "newMaterial",
+      "New Material has been Added to the class"
     );
   }
 };

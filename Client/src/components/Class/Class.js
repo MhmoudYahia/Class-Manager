@@ -252,7 +252,7 @@ export const Class = (props) => {
           scrollButtons={true}
           variant="scrollable"
           // scrollButtons="auto"
-          centered
+          // centered
           aria-label="full width tabs example"
           style={{ display: "flex", justifyContent: "center" }}
         >
@@ -307,6 +307,7 @@ export const Class = (props) => {
       >
         <TabPanel value={value} index={0} dir={theme.direction}>
           <MaterialsSection
+            teacher={user}
             role={user.__t}
             materials={classData.doc.materials}
             classId={classData.doc._id}

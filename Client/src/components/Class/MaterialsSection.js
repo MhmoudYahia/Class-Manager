@@ -17,8 +17,9 @@ import { fetchWrapper } from "../../utils/fetchWrapper";
 import { useDispatch } from "react-redux";
 import { setAlertInfo, setShowAlert } from "../../redux/alertSlice";
 import { Tooltip } from "@mui/material";
+import { format } from "date-fns";
 
-export const MaterialsSection = ({ role, materials: m, classId }) => {
+export const MaterialsSection = ({ role, materials: m, classId, teacher }) => {
   const [materials, setMaterials] = useState(m);
 
   const [addDialogOpen, setAddDialogOpen] = useState(false);
@@ -93,7 +94,14 @@ export const MaterialsSection = ({ role, materials: m, classId }) => {
 
     // handle frontend
     if (status === "success") {
-      setMaterials([...materials, newMaterial]);
+      console.log(teacher);
+      const newM = {
+        ...newMaterial,
+        teacher: { name: teacher.name, email: teacher.email },
+        dateOfUploud: Date.now(),
+      };
+      console.log(newM);
+      setMaterials([...materials, newM]);
       setNewMaterial({
         description: "",
         link: "",
@@ -250,6 +258,15 @@ export const MaterialsSection = ({ role, materials: m, classId }) => {
                   <Typography gutterBottom variant="h5" component="div">
                     {material.description}
                   </Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    {format(new Date(material.dateOfUploud), "MMM dd, hh:mm a")}
+                  </Typography>
+                  {material.teacher && (
+                    <Typography variant="caption" color="text.secondary" marginLeft={2}>
+                      Uploaded By {material.teacher.name}(
+                      {material.teacher.email})
+                    </Typography>
+                  )}
                 </CardContent>
               </CardActionArea>
             </Tooltip>

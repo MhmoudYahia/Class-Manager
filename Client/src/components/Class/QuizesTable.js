@@ -61,6 +61,7 @@ export const QuizesTable = ({ role, quizes: initQuizes, classId, teacher }) => {
   const [quizSubject, setQuizSubject] = useState("");
   const [maxMarkValue, setMaxMarkValue] = useState(0);
   const [canReSubmit, setCanReSubmit] = useState(false);
+  const [quizMaxMark, setQuizMaxMark] = useState("");
   const [quizPublishDate, setQuizPublishDate] = useState(
     new Date(new Date() + 1000 * 60 * 60 * 24)
   );
@@ -236,9 +237,10 @@ export const QuizesTable = ({ role, quizes: initQuizes, classId, teacher }) => {
     setDeleteDialogOpen(false);
   };
 
-  const handleSubbmissionsDialogOpen = (subbmissions) => {
+  const handleSubbmissionsDialogOpen = (submissions, maxMark) => {
     setSubmissionsDialogOpen(true);
-    setSubmissions(subbmissions);
+    setSubmissions(submissions);
+    setQuizMaxMark(maxMark);
   };
 
   const handleSubbmissionsDialogClose = () => {
@@ -339,7 +341,10 @@ export const QuizesTable = ({ role, quizes: initQuizes, classId, teacher }) => {
                           color="success"
                           size="small"
                           onClick={() =>
-                            handleSubbmissionsDialogOpen(quiz.submissions)
+                            handleSubbmissionsDialogOpen(
+                              quiz.submissions,
+                              quiz.maxMarkValue
+                            )
                           }
                         >
                           Submissions
@@ -387,14 +392,17 @@ export const QuizesTable = ({ role, quizes: initQuizes, classId, teacher }) => {
         <DialogTitle align="center" className="dialog-title">
           Submissions
         </DialogTitle>
+        <Typography margin={2} align="center" fontWeight={600} color="#1bc400">Maximam Mark is {quizMaxMark}</Typography>
         <DialogContent>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 500 }} aria-label="class table">
               <TableHead>
                 <TableRow>
-                  <StyledTableCell  align="center">Submission Date</StyledTableCell>
-                  <StyledTableCell  align="center">Student</StyledTableCell>
-                  <StyledTableCell  align="center" >Marks</StyledTableCell>
+                  <StyledTableCell align="center">
+                    Submission Date
+                  </StyledTableCell>
+                  <StyledTableCell align="center">Student</StyledTableCell>
+                  <StyledTableCell align="center">Marks</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -417,7 +425,9 @@ export const QuizesTable = ({ role, quizes: initQuizes, classId, teacher }) => {
                       <TableCell align="center">
                         {submission.student.name}
                       </TableCell>
-                      <TableCell align="center">{submission.markValue}</TableCell>
+                      <TableCell align="center">
+                        {submission.markValue}
+                      </TableCell>
                     </StyledTableRow>
                   ))}
               </TableBody>

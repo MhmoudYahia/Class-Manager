@@ -1,0 +1,14 @@
+extends baseEmail
+
+block content
+  p Hi #{firstName},
+  p A new material has been add to the class click this button and start learning now!
+  table.btn.btn-primary(role='presentation', border='0', cellpadding='0', cellspacing='0')
+    tbody
+      tr
+        td(align='left')
+          table(role='presentation', border='0', cellpadding='0', cellspacing='0')
+            tbody
+              tr
+                td
+                  a(href=`${url}`, target='_blank') See The New Material

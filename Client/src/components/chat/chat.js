@@ -39,12 +39,11 @@ export const ChatBar = ({ sender: user, receiver }) => {
     setShowEmojiPicker(false);
   };
 
-
   useEffect(() => {
     if (user) {
       socket.current = io("http://localhost:1445", {
         withCredentials: true,
-        autoConnect: false
+        autoConnect: false,
       });
       socket.current.connect();
       socket.current.emit("add-user", user._id);
@@ -175,6 +174,7 @@ export const ChatBar = ({ sender: user, receiver }) => {
             flexDirection: "column",
             display: "flex",
             padding: "7px",
+            overflowX: "clip",
             backgroundImage:
               "url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcZ3gbiJvHOCC-L_OMlu12Kjf6OFBgXXlIuo0GeJ4OodW0t7Z3jfMyTZ5pzDR0Ec8oidc&usqp=CAU)",
           }}
@@ -188,6 +188,7 @@ export const ChatBar = ({ sender: user, receiver }) => {
                 marginBottom: 1,
                 padding: 1,
                 borderRadius: "4px",
+                position: "relative",
                 backgroundColor:
                   msg.fromSelf || msg.sender === user._id
                     ? "#c2c2c2"
@@ -197,6 +198,23 @@ export const ChatBar = ({ sender: user, receiver }) => {
               }}
             >
               {msg.messageText}
+              <span
+                style={{
+                  width: 0,
+                  display: "block",
+                  height: 0,
+                  position: "absolute",
+                  border: "8px solid",
+                  "border-color":
+                    msg.fromSelf || msg.sender === user._id
+                      ? "transparent transparent transparent #c2c2c2"
+                      : "transparent  #f3f3f3 transparent transparent",
+                  right:   msg.fromSelf || msg.sender === user._id?  "-13px": null,
+                  left:   !msg.fromSelf && msg.sender !== user._id?  "-13px": null,
+
+                  top: "23px",
+                }}
+              ></span>
             </Typography>
           ))}
         </Box>
