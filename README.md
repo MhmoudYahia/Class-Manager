@@ -34,8 +34,6 @@ To enhance user experience, the application implements user-friendly alerts thro
 
 This project aims to streamline the educational process by providing a centralized platform for teachers and students to collaborate, access resources, assess learning, and communicate effectively. It offers a user-friendly interface, robust security measures, and an intuitive design to enhance the overall learning experience.
 
-For detailed instructions on setup, usage, and additional features, please refer to the project's README file.
-
 ## Project Description
 The application caters to two main user roles: teachers and students. During the signup process, users can specify their role as either a teacher or a student, determining the features and functionalities available to them within the application. Teachers enjoy additional capabilities compared to students, enabling them to perform various actions related to classroom management and content delivery.
  
