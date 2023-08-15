@@ -82,15 +82,17 @@ exports.addStudentOrTeacher = catchAsync(async (req, res, next) => {
   const { email, code } = req.body;
   const { id } = req.params;
 
+  const user = await User.findOne({ email });
+  if (!user) return next(new AppError("No user with this email", 404));
+
   let myClass;
-  if (id) myClass = await Class.findById(id);
-  else if (code) myClass = await Class.findOne({ code });
+  if (id) {
+    myClass = await Class.findById(id);
+  } else if (code) {
+    myClass = await Class.findOne({ code });
+  }
 
   if (!myClass) return next(new AppError("No Class with this code", 404));
-
-  const user = await User.findOne({ email });
-
-  if (!user) return next(new AppError("No user with this email", 404));
 
   if (user.classes.includes(myClass._id) || myClass.students.includes(user._id))
     return next(new AppError("This User allready exists", 400));

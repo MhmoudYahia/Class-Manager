@@ -101,11 +101,16 @@ export const HomeClasses = () => {
 
   const [myClasses, setMyClasses] = useState([]);
   const { message, data, status, loading } = useFetch(
-    "http://localhost:1445/api/v1/classes/getMyClasses"
+    `http://localhost:1445/api/v1/classes${
+      user.__t === "Admin" ? "/" : "/getMyClasses"
+    }`
   );
 
   useEffect(() => {
-    if (status === "success") setMyClasses(data.myClasses);
+    if (status === "success") {
+      if (user.__t === "Admin") setMyClasses(data.docs);
+      else setMyClasses(data.myClasses);
+    }
   }, [status]);
 
   return (
@@ -186,7 +191,7 @@ export const HomeClasses = () => {
         </Box>
       )}
 
-      <hr />
+      {user.__t !== "Admin" && <hr />}
       <Typography
         gutterBottom
         variant="h5"
@@ -199,7 +204,7 @@ export const HomeClasses = () => {
           textTransform: "uppercase",
         }}
       >
-        My Classes
+        {user.__t === "Admin" ? "All Classes" : "My Classes"}
       </Typography>
       <div style={{ margin: " 20px 5px", display: "flex", flexWrap: "wrap" }}>
         {loading && (
@@ -212,7 +217,11 @@ export const HomeClasses = () => {
         {!loading &&
           myClasses &&
           myClasses.map((Oclass) => {
-            return <Link to={`/classes/${Oclass._id}`}><ClassCard  clss={Oclass} user={user} /></Link>;
+            return (
+              <Link to={`/classes/${Oclass._id}`}>
+                <ClassCard clss={Oclass} user={user} />
+              </Link>
+            );
           })}
       </div>
     </div>

@@ -2,15 +2,26 @@ import * as React from "react";
 import { Button, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
-import { DataGrid , GridToolbar} from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { COLORS } from "../../utils/colors";
 import { useFetch } from "../../utils/useFetch";
 import { useDispatch } from "react-redux";
 import { setReceiver, setShowChat } from "../../redux/chatSlice";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import TextField from "@mui/material/TextField";
+import { fetchWrapper } from "../../utils/fetchWrapper";
+import { setAlertInfo, setShowAlert } from "../../redux/alertSlice";
 
 
-export const StudentsList = ({ students }) => {
+
+export const StudentsList = ({ students, role, classId }) => {
   const dispatch = useDispatch();
+  const [DialogOpen, setDialogOpen] = React.useState(false);
+  const [email, setEmail] = React.useState("");
   const rows = students.map((student) => ({
     ...student,
     id: student._id,
@@ -30,7 +41,7 @@ export const StudentsList = ({ students }) => {
           color="primary"
           onClick={() => handleChat(params.row)}
         >
-          Chat 
+          Chat
         </Button>
       ),
     },
@@ -41,6 +52,40 @@ export const StudentsList = ({ students }) => {
     dispatch(setReceiver(row));
     dispatch(setShowChat(true));
   }
+  const handleAddStudent = async () => {
+    const { message, data, status } = await fetchWrapper(
+      `/classes/${classId}/addUser`,
+      "PATCH",
+      JSON.stringify({
+        email,
+      }),
+      { "Content-Type": "application/json" }
+    );
+
+    if (status === "success") {
+      dispatch(
+        setAlertInfo({
+          severity: "success",
+          message: "Student has been added successfully 🫡",
+        })
+      );
+      dispatch(setShowAlert(true));
+      setTimeout(() => {
+        dispatch(setShowAlert(false));
+      }, 3000);
+    } else {
+      dispatch(
+        setAlertInfo({
+          severity: "error",
+          message,
+        })
+      );
+      dispatch(setShowAlert(true));
+      setTimeout(() => {
+        dispatch(setShowAlert(false));
+      }, 5000);
+    }
+  };
 
   return (
     <>
@@ -60,9 +105,18 @@ export const StudentsList = ({ students }) => {
       >
         Students
       </Typography>
+      {role === "Teacher" && (
+        <Button
+          variant="contained"
+          color="secondary"
+          style={{ marginBottom: 20 }}
+          endIcon={<GroupAddIcon />}
+          onClick={() => setDialogOpen(true)}
+        >
+          Add Student
+        </Button>
+      )}
       <Box sx={{ width: "100%" }}>
-    
-        
         <DataGrid
           rows={rows}
           columns={columns}
@@ -74,8 +128,30 @@ export const StudentsList = ({ students }) => {
             Toolbar: GridToolbar,
           }}
         />
-    
       </Box>
+      {/* Dialog for deleting rows */}
+      <Dialog open={DialogOpen} onClose={() => setDialogOpen(false)}>
+        <DialogTitle className="dialog-title">Add Student</DialogTitle>
+        <DialogContent>
+          Enter the email of the student to add him to the class
+          <TextField
+            style={{ marginBottom: "20px" }}
+            margin="dense"
+            label="email"
+            type="text"
+            fullWidth
+            required={true}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleAddStudent} variant="contained">
+            Add
+          </Button>
+          <Button onClick={() => setDialogOpen(false)}>close</Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

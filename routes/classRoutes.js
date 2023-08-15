@@ -25,11 +25,14 @@ router
 
 router
   .route("/:id/deleteAnnouncement/:annId")
-  .delete(authController.strictTo("Teacher"), classController.deleteAnnouncement);
+  .delete(
+    authController.strictTo("Teacher"),
+    classController.deleteAnnouncement
+  );
 
 router
   .route("/")
-  .get(classController.getAllClasses)
+  .get(authController.strictTo("Admin"), classController.getAllClasses)
   .post(
     authController.strictTo("Teacher"),
     classController.uploadCoverImg,
@@ -72,7 +75,10 @@ router
 router
   .route("/:id")
   .get(classController.getClass)
-  .delete(authController.strictTo("Teacher"), classController.deleteClass)
+  .delete(
+    authController.strictTo("Teacher", "Admin"),
+    classController.deleteClass
+  )
   .patch(authController.strictTo("Teacher"), classController.updateClass);
 
 module.exports = router;

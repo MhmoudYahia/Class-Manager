@@ -30,6 +30,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import { fetchWrapper } from "../../utils/fetchWrapper";
+import { CardContent } from "@mui/material";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -215,8 +216,26 @@ export const Class = (props) => {
           image="/imgs/classImgs/cover.jpg"
           title="Class Cover"
         />
+        <CardContent
+          style={{
+            position: "absolute",
+            right: "50%",
+            transform: "translateX(50%)",
+            top: "12%",
+            backgroundColor: "rgb(93, 20, 190, 0.9)",
+            padding: "28px 50px",
+            borderRadius: "5px",
+            "box-shadow": "0 0 10px",
+          }}
+        >
+          <Typography fontSize={35} fontWeight={700} color="white">
+            {classData.doc.name}
+          </Typography>
+          <Typography color="#2bdb0f">Code: {classData.doc.code}</Typography>
+        </CardContent>
       </Card>
-      {user.__t === "Teacher" && (
+
+      {(user.__t === "Teacher" || user.__t === "Admin") && (
         <Button
           variant="contained"
           size="small"
@@ -333,10 +352,18 @@ export const Class = (props) => {
         </TabPanel>
 
         <TabPanel value={value} index={3} dir={theme.direction}>
-          <StudentsList students={classData.doc.students} />
+          <StudentsList
+            students={classData.doc.students}
+            role={user.__t}
+            classId={id}
+          />
         </TabPanel>
         <TabPanel value={value} index={4} dir={theme.direction}>
-          <TeachersList teachers={classData.doc.teachers} />
+          <TeachersList
+            teachers={classData.doc.teachers}
+            role={user.__t}
+            classId={id}
+          />
         </TabPanel>
         <TabPanel value={value} index={5} dir={theme.direction}>
           <Announcements

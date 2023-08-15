@@ -313,7 +313,6 @@ export const Navbar = () => {
             <LockIcon sx={{ marginRight: 1, color: COLORS.mainColor }} /> Change
             Password
           </MenuItem>
-
           {user && user.__t === "Student" && (
             <Link to="/myMarks" style={{ color: "#111" }}>
               <MenuItem>
@@ -325,6 +324,29 @@ export const Navbar = () => {
           <MenuItem onClick={(e) => setShowContacts(true)}>
             <GroupIcon sx={{ marginRight: 1, color: COLORS.mainColor }} /> Chats
           </MenuItem>
+
+          {user && user.__t === "Admin" && (
+            <>
+              <Divider />
+              <Typography padding="0 19px" fontWeight={600} color="#709003">
+                Admin
+              </Typography>
+              <Link to="/teachers" style={{ color: "#111" }}>
+                <MenuItem>
+                  <GroupIcon sx={{ marginRight: 1, color: COLORS.mainColor }} />{" "}
+                  All Teachers
+                </MenuItem>
+              </Link>
+
+              <Link to="/students" style={{ color: "#111" }}>
+                <MenuItem>
+                  <GroupIcon sx={{ marginRight: 1, color: COLORS.mainColor }} />{" "}
+                  All Students
+                </MenuItem>
+              </Link>
+            </>
+          )}
+
           <Divider />
           <Link to="/signup" style={{ color: "#111" }}>
             <MenuItem>
@@ -334,12 +356,14 @@ export const Navbar = () => {
               Add another account
             </MenuItem>
           </Link>
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <Settings fontSize="small" sx={{ color: COLORS.mainColor }} />
-            </ListItemIcon>
-            Settings
-          </MenuItem>
+          {
+            <MenuItem onClick={handleClose}>
+              <ListItemIcon>
+                <Settings fontSize="small" sx={{ color: COLORS.mainColor }} />
+              </ListItemIcon>
+              Settings
+            </MenuItem>
+          }
           <MenuItem onClick={handleLogOut}>
             <ListItemIcon>
               <Logout fontSize="small" sx={{ color: COLORS.mainColor }} />

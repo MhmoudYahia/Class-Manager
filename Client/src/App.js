@@ -25,6 +25,8 @@ import { Stack } from "@mui/material";
 import { ChatBar } from "./components/chat/chat";
 import { useSelector } from "react-redux";
 import { MyMarks } from "./components/User/AllMyMarks";
+import { Teachers } from "./manager/Teachers";
+import { Students } from "./manager/Students";
 
 function App() {
   const { showAlert, alertInfo } = useSelector((state) => state.alert);
@@ -72,6 +74,8 @@ function App() {
             />
             <Route path="/me" element={user ? <ProfilePage /> : <Page404 />} />
             <Route path="/myMarks" element={user ? <MyMarks /> : <Page404 />} />
+            <Route path="/teachers" element={user ? <Teachers /> : <Page404 />} />
+            <Route path="/students" element={user ? <Students /> : <Page404 />} />
             <Route
               path="/quizes/:id"
               element={user ? <QuizPage /> : <Page404 />}
