@@ -7,6 +7,8 @@ This project is a Class Manager website built using the MERN stack (MongoDB, Exp
 
 ## 🧑🏼‍💻 Client  Tech Stack
 - ReactJS
+- React Redux
+- reduxjs/toolkit
 - Pug Templates (For Emails)
 - Socket.io-Client
   
