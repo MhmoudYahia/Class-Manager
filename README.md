@@ -160,11 +160,84 @@ JWT authentication using cookies combines the benefits of JWTs with the enhanced
 
 #### See Full API Documentation on Postman [here](https://documenter.getpostman.com/view/23936176/2s9Xy6pUw4)
 
-## 📱 Screenshots (More Details are in Live Demo)
+## 📱 Screenshots For Teacher UI
+### Home Page 
+![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/08a193d2-cd8a-4b90-a8af-86f2591cf5a8)
+#### You Will Enter The Class After Creating, Or By Clicking On It. You Will Find Many Tabs
+![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/b3c7e211-620d-4baa-a1fe-96ac950852ab)
 
+#### If The Teacher want to delete The Class (delete button Dialog)
+![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/e5e2acad-e6d1-46f4-888a-4e5a9fac35ad)
+### Material Tab 
+![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/73997f02-e1e1-4dab-9313-39914654f16a)
+### Quizs Tab
+![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/a02aa8e8-c2b6-41f8-9802-47973db27e5b)
+#### if you  clicked on submissions button, you will see a Dialog with students submissions
+![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/ba906c73-3039-4db3-97c8-4faa9c8ea149)
+#### Delete Dialog 
+![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/0b92d7fe-a42f-41fc-93ac-3af72e975f9f)
+#### Add Quiz Form 
+![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/a91e31a8-dc08-4f7f-a917-32ac3debe58c)
 
+### Student Marks Tab
+![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/aeaedb84-f704-455b-b31f-35d8f46304da)
+#### Teacher can delete(Dialog like the last one) or edit the mark
+![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/42921ff4-3e53-4097-b2ed-4ea6de8b60ec)
+
+### Teachers List Tab (Teacher can add another teacher) 
+![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/4a209c74-10e5-482e-9273-22a10f635f2f)
+
+### Students List Tab (Teacher can also add students by himself using there emails)
+![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/64c192e1-8de6-4173-aee5-7ba5e222ed3e)
+
+### Announcements Tab (Teacher can edit or delete the annoucement)
+
+![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/66acf194-448e-454d-8de2-e8df100d5562)
+
+## 📱 Screenshots For Student UI
+### Home Page (Enter the class code and enroll)
+![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/a4096bd6-1d19-4cce-a9ea-5cf793c58965)
+### Class Page With the Tabs
+![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/38f1c629-4ba8-451a-882e-c247e0dc2c24)
+#### un Enroll Dialog 
+![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/cc086490-9cac-4b69-ab1e-02b5af30dc6f)
+### Quizs Tab
+![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/cc4bfc77-98ee-4726-961f-7bdf148cc7c4)
+#### If you started the quiz
+##### If you entered before you will see the final result, correct ansers and also you answers
+![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/e838a78a-7ac3-4918-affd-3a93723d73e8)
+![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/19c8efa1-1110-4008-b5f0-82ffc37dc9ab)
+##### If it the first time to enter the quiz (answer before the timer closes the quiz over you)
+![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/47a01d05-e6df-4d2e-8016-0a961f2d66b8)
+
+### Student Marks
+![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/d120e769-61c0-4200-8779-b7573ce1e1c6)
+
+### Annoucements
+![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/8e025de9-f273-4a4a-8de6-b98687047b80)
+
+## 📱 General Screenshots 
+![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/41ce36a1-3f80-4731-8422-b9385d62a6bd)
+ ###  Frofile page
+ ![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/906c21b2-e277-4406-99dc-4777b56962d2)
+### change Password Dialog Form
+![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/6ec62153-adeb-408a-9ef6-4f4fdff1d7cd)
+### My Classes List
+![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/751cc2ae-d8a7-484f-b05f-3fa82d2e4e70)
+
+### List Of My Marks
+![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/bfbe0c89-669c-4d9c-a461-885727ccf2bd)
+
+### Real-Time Chats
+![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/50da20ca-f205-46d8-8dc1-bebf003ba5ac)
+
+### Auth. Forms
+
+![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/6a071ff9-a4c0-4e22-bf6a-7fd05493a7d9)
+![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/b71a1397-ee43-4198-8180-cbe4ff725a69)
+![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/aafd1c5a-2135-4f65-84bd-b5363f25cb56)
+![image](https://github.com/MhmoudYahia/Natours-App/assets/94763036/22849469-d8a7-41b4-aa63-691e3323813d)
 ## Run Locally
-
 Clone the project
 
 ```bash
