@@ -63,12 +63,14 @@ export const StudentsList = ({ students, role, classId }) => {
     );
 
     if (status === "success") {
+      setEmail("")
       dispatch(
         setAlertInfo({
           severity: "success",
           message: "Student has been added successfully 🫡",
         })
       );
+      console.log(data);
       dispatch(setShowAlert(true));
       setTimeout(() => {
         dispatch(setShowAlert(false));

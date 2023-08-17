@@ -99,7 +99,7 @@ classSchema.pre(/^find/, function (next) {
 
   this.populate({
     path: "announcements.teacher",
-    select: "name email",
+    select: "name email photo",
   });
 
   this.populate({

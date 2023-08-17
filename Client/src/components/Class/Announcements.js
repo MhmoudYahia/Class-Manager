@@ -8,6 +8,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
+import Avatar from "@mui/material/Avatar";
 import DialogTitle from "@mui/material/DialogTitle";
 import Divider from "@mui/material/Divider";
 import { format } from "date-fns";
@@ -246,22 +247,51 @@ export const Announcements = ({
           <Box
             key={announcement._id}
             sx={{
-              mb: 2,
               border: "2px solid blueviolet",
               padding: "14px",
               backgroundColor: "aliceblue",
               borderRadius: "11px",
+              width: "60%",
+              margin: "30px auto",
             }}
           >
-            <Typography variant="subtitle1" sx={{ fontWeight: "bold", mb: 1 }}>
-              {announcement.teacher.name} ({announcement.teacher.email})
-            </Typography>
-            <Typography variant="body1" sx={{ mb: 1 }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: "9px" }}>
+              <Avatar
+                alt={announcement.teacher.name}
+                src={`/imgs/users/${announcement.teacher.photo}`}
+              />
+              <Box>
+                {" "}
+                <Typography>
+                  {announcement.teacher.name} ({announcement.teacher.email})
+                </Typography>{" "}
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  align="left"
+                  display="block"
+                >
+                  {format(new Date(announcement.createdAt), "MMM dd, hh:mm a")}
+                </Typography>
+              </Box>
+            </Box>
+            <Typography
+              variant="subtitle1"
+              sx={{ fontWeight: "bold", mb: 1 }}
+            ></Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                mb: 1,
+                padding: "16px",
+                textAlign: "left",
+                color: "rgb(73 73 73)",
+                lineHeight: 1.8,
+              }}
+            >
               {announcement.announcementBody}
             </Typography>
-            <Typography variant="caption" color="text.secondary">
-              {format(new Date(announcement.createdAt), "MMM dd, hh:mm a")}
-            </Typography>
+
             {role === "Teacher" && (
               <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 1 }}>
                 <Button

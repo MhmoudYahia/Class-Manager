@@ -99,6 +99,8 @@ export const QuizesTable = ({ role, quizes: initQuizes, classId, teacher }) => {
     // Handle adding the new question to the quiz here
     setNumOptions(0);
     setNumOptions(null);
+    setNumOptions("");
+    setQuestionMark("");
     setQuestion("");
     setQuestionMark(null);
     setOptions(Array(numOptions).fill(""));
@@ -392,7 +394,9 @@ export const QuizesTable = ({ role, quizes: initQuizes, classId, teacher }) => {
         <DialogTitle align="center" className="dialog-title">
           Submissions
         </DialogTitle>
-        <Typography margin={2} align="center" fontWeight={600} color="#1bc400">Maximam Mark is {quizMaxMark}</Typography>
+        <Typography margin={2} align="center" fontWeight={600} color="#1bc400">
+          Maximam Mark is {quizMaxMark}
+        </Typography>
         <DialogContent>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 500 }} aria-label="class table">
@@ -478,6 +482,25 @@ export const QuizesTable = ({ role, quizes: initQuizes, classId, teacher }) => {
               />
             </LocalizationProvider>
           </div>
+          <TextField
+            select
+            label="Can Resubmit?"
+            value={canReSubmit}
+            onChange={(e) => {
+              setCanReSubmit(e.target.value);
+            }}
+            fullWidth
+            margin="normal"
+            variant="outlined"
+          >
+            <MenuItem key={1} value={true}>
+              true
+            </MenuItem>
+
+            <MenuItem key={2} value={false}>
+              false
+            </MenuItem>
+          </TextField>
           <DialogTitle align="center">Add Questions</DialogTitle>
           <TextField
             margin="dense"
@@ -532,29 +555,11 @@ export const QuizesTable = ({ role, quizes: initQuizes, classId, teacher }) => {
             value={questionMark}
             onChange={(e) => setQuestionMark(e.target.value)}
           />
-          <TextField
-            select
-            label="Student"
-            value={canReSubmit}
-            onChange={(e) => {
-              setCanReSubmit(e.target.value);
-            }}
-            fullWidth
-            margin="normal"
-            variant="outlined"
-          >
-            <MenuItem key={1} value={true}>
-              true
-            </MenuItem>
-
-            <MenuItem key={2} value={false}>
-              false
-            </MenuItem>
-          </TextField>
         </DialogContent>
         <StyledButton onClick={handleAddQuestionClick}>
           Add Question
         </StyledButton>
+
         <DialogActions>
           <Button onClick={handleClose} color="error">
             Cancel

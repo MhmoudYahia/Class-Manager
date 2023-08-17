@@ -66,7 +66,7 @@ export const ClassCard = ({ clss, user }) => {
               image="/imgs/classImgs/cover.jpg"
               alt="class cover"
             />
-            <CardContent>
+            <CardContent style={{ height: "106px" }}>
               <Typography gutterBottom variant="h5" component="div">
                 {clss.name}
               </Typography>

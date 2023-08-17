@@ -16,7 +16,10 @@ const quizSchema = new mongoose.Schema({
   },
   questions: [
     {
-      questionMark: Number,
+      questionMark: {
+        type: Number,
+        default: 10,
+      },
       question: String,
       options: [String],
       correctAnswer: String,
