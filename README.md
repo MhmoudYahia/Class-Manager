@@ -159,6 +159,7 @@ JWT authentication using cookies combines the benefits of JWTs with the enhanced
 
 
 #### See Full API Documentation on Postman [here](https://documenter.getpostman.com/view/23936176/2s9Xy6pUw4)
+<hr>
 
 ## 📱 Screenshots For Teacher UI
 ### Home Page 
@@ -179,7 +180,7 @@ JWT authentication using cookies combines the benefits of JWTs with the enhanced
 #### Add Quiz Form 
 ![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/a91e31a8-dc08-4f7f-a917-32ac3debe58c)
 
-### Student Marks Tab
+### Students Marks Tab
 ![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/aeaedb84-f704-455b-b31f-35d8f46304da)
 #### Teacher can delete(Dialog like the last one) or edit the mark
 ![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/42921ff4-3e53-4097-b2ed-4ea6de8b60ec)
@@ -194,6 +195,8 @@ JWT authentication using cookies combines the benefits of JWTs with the enhanced
 
 ![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/66acf194-448e-454d-8de2-e8df100d5562)
 
+<hr>
+
 ## 📱 Screenshots For Student UI
 ### Home Page (Enter the class code and enroll)
 ![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/a4096bd6-1d19-4cce-a9ea-5cf793c58965)
@@ -204,17 +207,20 @@ JWT authentication using cookies combines the benefits of JWTs with the enhanced
 ### Quizs Tab
 ![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/cc4bfc77-98ee-4726-961f-7bdf148cc7c4)
 #### If you started the quiz
-##### If you entered before you will see the final result, correct ansers and also you answers
+##### If you entered before you will see the final result, correct answers and also you answers
 ![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/e838a78a-7ac3-4918-affd-3a93723d73e8)
 ![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/19c8efa1-1110-4008-b5f0-82ffc37dc9ab)
-##### If it the first time to enter the quiz (answer before the timer closes the quiz over you)
-![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/47a01d05-e6df-4d2e-8016-0a961f2d66b8)
+##### If it the first time to enter the quiz (answer before the timer closes the quiz over you :)
+![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/91b494df-f947-40f1-9fad-bf239bc4865f)
+
 
 ### Student Marks
 ![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/d120e769-61c0-4200-8779-b7573ce1e1c6)
 
 ### Annoucements
 ![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/8e025de9-f273-4a4a-8de6-b98687047b80)
+
+<hr>
 
 ## 📱 General Screenshots 
 ![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/41ce36a1-3f80-4731-8422-b9385d62a6bd)
