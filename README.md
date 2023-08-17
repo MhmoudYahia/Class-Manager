@@ -105,10 +105,43 @@ The application caters to two main user roles: teachers and students. During the
 
 #### Welcome Email:
 New users receive a welcome email after signing up, providing a warm introduction to the platform and guiding them through the initial steps.
+#### Email With The New Materials or Announcements:
+Users receive an email with the new material that the teacher uploaded it to be familiar with new course materials. Also the new announcements.
 #### User-Friendly Alerts:
 Throughout the website, user-friendly alerts are implemented to provide guidance, notifications, and feedback, enhancing the overall user experience.
 
 
+## JWT Authentication using Cookies
+
+JWT (JSON Web Token) authentication is a popular method used for securing web applications and APIs. It allows for stateless authentication by using digitally signed tokens to validate and authorize user requests. While JWTs are typically stored in the client-side, using cookies for JWT storage offers additional security benefits. This document provides a brief overview of JWT authentication using cookies.
+
+How JWT Authentication Works:
+
+1. User Authentication: When a user logs in to an application, their credentials are verified by the server. If the credentials are valid, a JWT is generated and signed using a secret key known only to the server.
+
+1. Token Issuance: The signed JWT is then sent back to the client as a response. It contains three parts: header, payload, and signature. The header specifies the signing algorithm used, while the payload contains claims (e.g., user ID, expiration time) about the user. The signature is created by hashing the header, payload, and secret key together.
+
+1. Token Storage: In traditional JWT authentication, the client stores the JWT in local storage or session storage. However, to enhance security and prevent cross-site scripting (XSS) attacks, storing JWTs in cookies is a recommended approach.
+
+JWT Authentication with Cookies:
+
+1. Set Cookie: When the client receives the JWT, it is typically stored in an HTTP-only cookie. An HTTP-only cookie is inaccessible to JavaScript, making it more secure against XSS attacks. The cookie should have a secure flag set if the application is served over HTTPS.
+
+1. Cookie Transmission: With each subsequent request, the client automatically includes the JWT as a cookie in the request headers. The server can access the JWT from the cookie and verify its authenticity by checking the signature using the secret key.
+
+1. Token Expiration: The JWT includes an expiration time (exp), after which it becomes invalid. The server should verify the expiration time and deny access if the token has expired. If needed, the server can issue a new JWT by following the authentication process.
+
+Benefits of JWT Authentication with Cookies:
+
+1. Improved Security: Storing JWTs in HTTP-only cookies mitigates the risk of XSS attacks as they cannot be accessed by malicious JavaScript code.
+
+1. Simplicity: Using cookies for JWT storage eliminates the need for developers to handle the complexities of client-side token storage.
+
+1. Cross-Domain Requests: Cookies are automatically sent with cross-domain requests, allowing for seamless authentication across multiple subdomains or separate applications.
+
+1. Token Revocation: If necessary, JWTs stored in cookies can be easily revoked by deleting the cookie on the server-side, preventing further access.
+
+JWT authentication using cookies combines the benefits of JWTs with the enhanced security offered by HTTP-only cookies. By securely storing JWTs on the client-side, developers can ensure the integrity and confidentiality of user authentication while simplifying the implementation process. 
 
   
 ## API Reference
