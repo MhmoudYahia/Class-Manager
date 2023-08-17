@@ -168,15 +168,14 @@ JWT authentication using cookies combines the benefits of JWTs with the enhanced
 ![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/b3c7e211-620d-4baa-a1fe-96ac950852ab)
 
 #### If The Teacher want to delete The Class (delete button Dialog)
-![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/e5e2acad-e6d1-46f4-888a-4e5a9fac35ad)
+![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/a6da6996-6f16-42e9-b676-6921e0fdf1d9)
+
 ### Material Tab 
 ![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/73997f02-e1e1-4dab-9313-39914654f16a)
 ### Quizs Tab
 ![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/a02aa8e8-c2b6-41f8-9802-47973db27e5b)
 #### if you  clicked on submissions button, you will see a Dialog with students submissions
 ![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/ba906c73-3039-4db3-97c8-4faa9c8ea149)
-#### Delete Dialog 
-![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/0b92d7fe-a42f-41fc-93ac-3af72e975f9f)
 #### Add Quiz Form 
 ![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/a91e31a8-dc08-4f7f-a917-32ac3debe58c)
 
