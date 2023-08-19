@@ -62,7 +62,7 @@ const QuizPage = (/*{ doc }*/) => {
     data: quizData,
     loading,
     status,
-  } = useFetch(`http://localhost:1445/api/v1/quizes/${id}`);
+  } = useFetch(`/api/v1/quizes/${id}`);
 
   React.useEffect(() => {
     if (status === "success") {

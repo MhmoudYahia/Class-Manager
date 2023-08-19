@@ -20,7 +20,7 @@ const styles = {
   root: {
     padding: "180px 90px",
     backgroundImage:
-      "url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7t7wWZcD-Qs1jFb3-X6UcP9hzvV5-g1Qt2w&usqp=CAU)",
+      "url(\"/imgs/profileBG.jpeg\")",
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
   },

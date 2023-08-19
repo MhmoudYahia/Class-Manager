@@ -53,11 +53,11 @@ export const Navbar = () => {
   const [user, setUserInfo] = React.useState(null);
 
   const { status, data, message, loading } = useFetch(
-    "http://localhost:1445/api/v1/users/me"
+    "/api/v1/users/me"
   );
   // get contacts
   const { data: d2 } = useFetch(
-    "http://localhost:1445/api/v1/chats/getContacts"
+    "/api/v1/chats/getContacts"
   );
 
   React.useEffect(() => {

@@ -65,8 +65,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(express.static(path.join(__dirname, "./Client")));
-// if the above route doesn't fit, this will work
+
 
 // routes
 const teacherRoutes = require("./routes/teacherRoutes");
@@ -88,6 +87,12 @@ app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/marks", marksRouter);
 app.use("/api/v1/chats", chatRoutes);
 
+
+app.use(express.static(path.join(__dirname, "./client/build")));
+// if the above route doesn't fit, this will work
+app.get("*",(req,res)=> {
+  res.sendFile(path.join(__dirname, "./client/build/index.html"));
+})
 app.all("*", (req, res, next) => {
   next(new appError(`Cant find ${req.originalUrl} on this server!`, 404));
 });

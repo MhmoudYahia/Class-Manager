@@ -101,7 +101,7 @@ export const HomeClasses = () => {
 
   const [myClasses, setMyClasses] = useState([]);
   const { message, data, status, loading } = useFetch(
-    `http://localhost:1445/api/v1/classes${
+    `/api/v1/classes${
       user.__t === "Admin" ? "/" : "/getMyClasses"
     }`
   );

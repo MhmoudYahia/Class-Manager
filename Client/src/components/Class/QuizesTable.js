@@ -317,7 +317,7 @@ export const QuizesTable = ({ role, quizes: initQuizes, classId, teacher }) => {
                             color="success"
                             aria-label="go"
                             onClick={() =>
-                              (window.location.href = `http://localhost:3000/quizes/${quiz._id}`)
+                              (window.location.href = `/quizes/${quiz._id}`)
                             }
                           >
                             <ContentPasteGoIcon />

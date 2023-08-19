@@ -6,7 +6,7 @@ import { useFetch } from "../utils/useFetch";
 
 export const Teachers = () => {
   const { message, data, loading, status } = useFetch(
-    `http://localhost:1445/api/v1/teachers`
+    `/api/v1/teachers`
   );
 
   if (loading) {

@@ -34,7 +34,7 @@ export const MyMarks = () => {
     data: marksData,
     loading,
     status,
-  } = useFetch(`http://localhost:1445/api/v1/marks`);
+  } = useFetch(`/api/v1/marks`);
 
   const [marks, setMarks] = useState([]);
 

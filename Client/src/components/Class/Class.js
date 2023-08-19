@@ -100,14 +100,14 @@ export const Class = (props) => {
     data: classData,
     loading,
     status,
-  } = useFetch(`http://localhost:1445/api/v1/classes/${id}`);
+  } = useFetch(`/api/v1/classes/${id}`);
 
   const {
     message: message2,
     data: marksData,
     loading: loading2,
     status: status2,
-  } = useFetch(`http://localhost:1445/api/v1/classes/${id}/marks`);
+  } = useFetch(`/api/v1/classes/${id}/marks`);
 
   if (loading || loading2) {
     return (

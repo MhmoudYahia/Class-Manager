@@ -78,9 +78,7 @@ export const ChatBar = ({ sender: user, receiver }) => {
     data: chatData,
     loading,
     status,
-  } = useFetch(
-    `http://localhost:1445/api/v1/chats/${user._id}/${receiver._id}/`
-  );
+  } = useFetch(`/api/v1/chats/${user._id}/${receiver._id}/`);
 
   useEffect(() => {
     if (status === "success") {
@@ -169,14 +167,15 @@ export const ChatBar = ({ sender: user, receiver }) => {
           ref={messageContainerRef}
           sx={{
             height: "300px",
+            // backgroundImage:" linear-gradient(rgb(255, 143, 178) 0%, rgb(167, 151, 255) 50%, rgb(0, 229, 255) 100%)",
+            borderRadius: "2%",
             overflowY: "auto",
             marginTop: 1,
             flexDirection: "column",
             display: "flex",
             padding: "7px",
             overflowX: "clip",
-            backgroundImage:
-              "url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcZ3gbiJvHOCC-L_OMlu12Kjf6OFBgXXlIuo0GeJ4OodW0t7Z3jfMyTZ5pzDR0Ec8oidc&usqp=CAU)",
+            backgroundImage: 'url("/imgs/chat.jpeg")',
           }}
         >
           {messages.map((msg, index) => (
@@ -209,8 +208,10 @@ export const ChatBar = ({ sender: user, receiver }) => {
                     msg.fromSelf || msg.sender === user._id
                       ? "transparent transparent transparent #c2c2c2"
                       : "transparent  #f3f3f3 transparent transparent",
-                  right:   msg.fromSelf || msg.sender === user._id?  "-13px": null,
-                  left:   !msg.fromSelf && msg.sender !== user._id?  "-13px": null,
+                  right:
+                    msg.fromSelf || msg.sender === user._id ? "-13px" : null,
+                  left:
+                    !msg.fromSelf && msg.sender !== user._id ? "-13px" : null,
 
                   top: "23px",
                 }}
