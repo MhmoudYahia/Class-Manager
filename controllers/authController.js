@@ -219,7 +219,6 @@ exports.forgetPassword = catchAsync(async (req, res, next) => {
   try {
     const resetUrl = `${req.protocol}://${
       req.get("host")
-      .replace(/\d+$/, 3000) // react port
     }/resetPassword/${resetToken}`; // set the react route here
     await new Email(user, resetUrl).sendResetPasswordEmail();
 

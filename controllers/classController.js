@@ -140,7 +140,7 @@ exports.addMaterial = catchAsync(async (req, res, next) => {
   // send the email material
   myClass.students.forEach(async (student) => {
     const urlclass = `${req.protocol}://${
-      req.get("host").replace(/\d+$/, 3000) // react port
+      req.get("host") // react port
     }/classes/${myClass._id}`; // set the react route here
     await new Email(student, urlclass).sendNewMaterialEmail();
   });
@@ -291,7 +291,7 @@ exports.addAnnouncement = catchAsync(async (req, res, next) => {
   // send the email annoucement
   myClass.students.forEach(async (student) => {
     const urlclass = `${req.protocol}://${
-      req.get("host").replace(/\d+$/, 3000) // react port
+      req.get("host") // react port
     }/classes/${myClass._id}`; // set the react route here
     await new Email(student, urlclass).sendNewAnnoucementEmail(
       announcementBody
