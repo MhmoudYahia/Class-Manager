@@ -163,6 +163,7 @@ JWT authentication using cookies combines the benefits of JWTs with the enhanced
 
 ## 📱 Screenshots For Teacher UI
 ### Home Page 
+![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/f06de418-3abf-443b-9b7f-8bbb529c9d3e)
 ![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/08a193d2-cd8a-4b90-a8af-86f2591cf5a8)
 #### You Will Enter The Class After Creating, Or By Clicking On It. You Will Find Many Tabs
 ![image](https://github.com/MhmoudYahia/Class-Manager/assets/94763036/b3c7e211-620d-4baa-a1fe-96ac950852ab)
