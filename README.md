@@ -281,7 +281,7 @@ JWT authentication using cookies combines the benefits of JWTs with the enhanced
 Clone the project
 
 ```bash
-  git clone https://github.com/MhmoudYahia/Natours-App.git
+  https://github.com/MhmoudYahia/Class-Manager.git
 ```
 
 Install dependencies
